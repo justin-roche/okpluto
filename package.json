@@ -4,6 +4,8 @@
   "description": "Meeting place for dogs and their owners",
   "main": "server.js",
   "scripts": {
+    "postinstall": "grunt build",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -45,6 +47,10 @@
     "react-bootstrap": "^0.30.5",
     "react-dom": "^15.3.2",
     "react-router": "^2.8.1",
-    "react-tap-event-plugin": "^1.0.0"
+    "react-tap-event-plugin": "^1.0.0",
+    "request": "^2.76.0",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-concurrent": "^2.3.1"
   }
 }
