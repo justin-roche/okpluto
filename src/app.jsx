@@ -4,9 +4,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router';
 import AuthService from './utils/AuthService.jsx';
+import { getInfo } from './utils/communication.js';
 import $ from 'jquery';
 import Home from './components/home.jsx';
-import { auth0 } from '../config/auth0.js';
+//import { auth0 } from '../config/auth0.js';
 import UsersPage from './components/usersPage.jsx'
 import Container from './components/container.jsx'
 import Profile from './components/profile.jsx'
@@ -15,12 +16,13 @@ import ProfileCreation from './components/profileCreation.jsx'
 import Loading from './components/loading.jsx'
 import MeetupCreation from './components/meetupCreation.jsx'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import api from '../config/api.js'
+//import api from '../config/api.js'
 import GoogleMapsLoader from 'google-maps'
 import InfoDrawer from './components/infoDrawer.jsx'
 
 
-const auth = new AuthService(auth0.AUTH0_CLIENT_ID, auth0.AUTH0_DOMAIN);
+getInfo().then(authPath => {
+const auth = new AuthService(authPath.auth.AUTH0_CLIENT_ID, authPath.auth.AUTH0_DOMAIN);
 
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
@@ -44,5 +46,5 @@ ReactDOM.render(
     </Route>
   </Router>, $('#app')[0]
 );
-
+})
 
