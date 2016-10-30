@@ -187,6 +187,7 @@ module.exports = function(app) {
 
 	//========Outside APIs Endpoints===========//
 	app.get('/api/shareKeys', (req, res) => {
+		console.log(req.headers.host)
 		var dev1 = new RegExp('127.0.0.1', 'g')
 		var dev2 = new RegExp('localhost:8080', 'g')
 		var prod = new RegExp('okpluto.herokuapp.com', 'g')
