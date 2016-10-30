@@ -22,8 +22,14 @@ const items = [
 
 class MeetupCreation extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = {category: 'Dog Park', lat: null, lng: null};
+    super(props);
+    const minDate = new Date();
+    this.state = {
+      category: 'Dog Park',
+      lat: null,
+      lng: null,
+      minDate: minDate
+    };
     this.handleChange = this.handleChange.bind(this);
     this.updateLocSearchBox = this.updateLocSearchBox.bind(this)
   }
@@ -172,7 +178,7 @@ class MeetupCreation extends React.Component {
               name="category"
               errorText={this.state.category===null && 'Required'}
               onChange={this.handleChange.bind(this, 'category')}
-              style={{width: 400, 'text-align': 'left'}}
+              style={{width: 400, 'textAlign': 'left'}}
             >
               {items}
             </SelectField>
@@ -191,6 +197,7 @@ class MeetupCreation extends React.Component {
             <DatePicker
               hintText="Pick a Day"
               name="date"
+              minDate={this.state.minDate}
               errorText={this.props.errorText.date}
               onChange={this.handleChange.bind(this, 'date')}
               textFieldStyle={{width: 400}}

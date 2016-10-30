@@ -18,7 +18,11 @@ app.use(bodyParser.json());
 //Route queries searches for db
 app.use((req, res, next) => {
   if (req.query.dbId) {
-    req.url = '/query/dbId';
+    if (req.path === '/api/users') {
+      req.url = '/query/dbId';
+    } else if (req.path === '/api/events') {
+      req.url = '/queryEvents/dbId'
+    }
   }
   next();
 })

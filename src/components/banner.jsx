@@ -2,8 +2,10 @@
 
 import React from 'react';
 
-const Banner = () => (
-  <div className="banner"></div>
+const Banner = (props) => (
+  <div className="banner">
+    <h1>{props.display}</h1>
+  </div>
 )
 
 module.exports = Banner;

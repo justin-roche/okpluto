@@ -9,7 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import MeetupCreation from './meetupCreation.jsx'
 import eventServices from '../services/eventServices.js';
-
+import Snackbar from 'material-ui/Snackbar';
 
 
 class MeetupDialog extends React.Component {
@@ -20,7 +20,8 @@ class MeetupDialog extends React.Component {
       errorText: {},
       creator: this.props.userInfo._id,
       attendees: [this.props.userInfo._id, this.props.userId],
-      category:'Dog Park'
+      category: 'Dog Park',
+      submitted: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -37,7 +38,7 @@ class MeetupDialog extends React.Component {
     this.setState({open: false});
   }
 
-  validate(values){
+  validate(values) {
     const errors = {};
     const requiredFields = [ 'eventname', 'where', 'date', 'time' ];
     requiredFields.forEach(field => {
@@ -45,7 +46,7 @@ class MeetupDialog extends React.Component {
         errors[field] = 'Required';
       }
     });
-    if (this.state.lat === null || this.state.lng === null) {
+    if (!this.state.lat || !this.state.lng) {
       errors.where = 'Please enter a valid location';
     }
     if (!this.state.category) {
@@ -60,10 +61,11 @@ class MeetupDialog extends React.Component {
     let handleClose = this.handleClose;
     if (Object.keys(errors).length === 0) {
       eventServices.saveEvent(this.state)
-      .then(function (data){
-        console.log(data);
-        handleClose();
-      });
+        .then(function (data){
+          console.log('Data: ', data);
+          handleClose();
+          self.setState({submitted: true });
+        });
     }
     this.setState({"errorText": errors});
   }
@@ -92,8 +94,8 @@ class MeetupDialog extends React.Component {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
         <div>
-          <RaisedButton onTouchTap={this.handleOpen} label="Let's Meetup!" secondary={true}/>
-          <Dialog title="Meetup Creation" actions={actions} modal={true} open={this.state.open} onRequestClose={this.handleClose} autoScrollBodyContent={true} autoDetectWindowHeight={true}>
+          <RaisedButton onTouchTap={this.handleOpen} label="Let's Meetup!" primary={true}/>
+          <Dialog title="Meetup Creation" titleStyle={{textAlign: 'center'}} actions={actions} modal={true} open={this.state.open} onRequestClose={this.handleClose} autoScrollBodyContent={true} autoDetectWindowHeight={true}>
             <div className="middle">
               <form name="events">
               <MeetupCreation lat={this.props.lat} lng={this.props.lng} targetUser={this.props.userId} change={this.handleChange} userInfo={this.props.userInfo} resetUserInfo={this.props.resetUserInfo} errorText={this.state.errorText}
@@ -101,14 +103,15 @@ class MeetupDialog extends React.Component {
             </form>
             </div>
           </Dialog>
+          <Snackbar
+            open={this.state.submitted}
+            message="Event created successfully"
+            autoHideDuration={3000}
+          />
         </div>
       </MuiThemeProvider>
     )
   }
-}
-
-const validate = values => {
-
 }
 
 module.exports = MeetupDialog;

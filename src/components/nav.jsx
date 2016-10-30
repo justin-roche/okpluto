@@ -13,11 +13,13 @@ class Navigation extends React.Component {
 
   render () {
     const barStyle= {
-      position: 'fixed',
-      backgroundColor: Colors.grey100
+      position: 'fixed'
     }
     const titleStyle = {
-      textAlign: 'left'
+      textAlign: 'left',
+      fontFamily: 'Quicksand, sans-serif',
+      fontWeight: 'bold',
+      fontSize: 36
     }
 
     return (

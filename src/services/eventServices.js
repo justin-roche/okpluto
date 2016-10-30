@@ -41,9 +41,48 @@ import { getLatLng } from './userServices.js';
     })
   }
 
+  const searchEvents = function(dbId) {
+    dbId = dbId || localStorage.getItem('mongoUserId');
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `api/events?dbId=${dbId}`,
+        type: 'GET',
+        success: resolve,
+        error: reject
+      });
+    });
+  }
+
+  const removePerson = function(eventId, userId) {
+    userId = userId || localStorage.getItem('mongoUserId')
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: 'api/events/remove',
+        type: 'PUT',
+        data: {eventId: eventId, userId: userId},
+        success: resolve,
+        error: reject
+      })
+    })
+  };
+
+  const deleteEvent = function(eventId) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: 'api/events',
+        type: 'DELETE',
+        data: {eventId: eventId},
+        success: resolve,
+        error: reject
+      })
+    })
+  }
 
 module.exports = {
   getEvents: getEvents,
   saveEvent: saveEvent,
-  addPerson: addPerson
+  addPerson: addPerson,
+  searchEvents: searchEvents,
+  removePerson: removePerson,
+  deleteEvent: deleteEvent
 };

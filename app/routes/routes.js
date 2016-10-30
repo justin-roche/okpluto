@@ -32,7 +32,6 @@ module.exports = function(app) {
 
 	//Find distance btwn coordinates
 	app.post('/api/distance', (req, res) => {
-		console.log(req.body)
 		var getDistance = function(originCoor, destCoors) {
 			return new Promise((resolve, reject) => {
 				googleMaps.distanceMatrix({
@@ -47,7 +46,6 @@ module.exports = function(app) {
 
 		getDistance(JSON.parse(req.body.origin), JSON.parse(req.body.destinations))
 		.then(results => {
-			console.log(results.json.rows[0].elements)
 			res.status(200).send(results.json.rows[0].elements)
 		})
 	})
@@ -69,7 +67,6 @@ module.exports = function(app) {
 				console.log(err);
 				res.status(404).send("Database error, no users found")
 			}
-			//console.log(users)
 			res.status(201).send({users: users});
 		});
 	});
@@ -151,6 +148,21 @@ module.exports = function(app) {
 		});
 	});
 
+	app.get('/queryEvents/dbId', (req, res) => {
+		Event.find({attendees: req.query.dbId})
+		.exec((err, attendingEvents) => {
+			Event.find({creator: req.query.dbId})
+			.exec((err, createdEvents) => {
+				if (err) {
+				console.log(err);
+				res.status(404).send("Database error, no events found")
+			} else {
+				res.status(201).send({attendingEvents: attendingEvents, createdEvents, createdEvents})
+			}
+			})
+		})
+	})
+
 	app.post('/api/events', (req, res) => {
 		req.body = JSON.parse(req.body.data);
 		new Event ({
@@ -170,7 +182,6 @@ module.exports = function(app) {
 	})
 
 	app.put('/api/events/add', (req, res) => {
-		console.log(req.body)
 		Event.findById(req.body.eventId, (err, event) => {
 			let attendees = event.attendees;
 			if (attendees.indexOf(req.body.userId) === -1) {
@@ -182,7 +193,31 @@ module.exports = function(app) {
 			})
 		})
 
+	});
+
+	app.put('/api/events/remove', (req, res) => {
+		Event.findById(req.body.eventId, (err, event) => {
+			let attendees = event.attendees;
+			let index = -1;
+			for (var i = 0; i < attendees.length; i++) {
+				if (attendees[i] === req.body.userId) {
+					index = i;
+					break;
+				}
+			}
+			event.attendees.splice(index, 1)
+			event.save((err, updatedEvent) => {
+				res.status(200).send({updatedEvent: updatedEvent});
+			})
+		})
 	})
+
+	app.delete('/api/events', (req, res) => {
+		Event.findByIdAndRemove(req.body.eventId, (err, event) => {
+			res.status(201).send({removedEvent: event})
+		})
+	})
+};
 
 	//========Outside APIs Endpoints===========//
 	app.get('/api/shareKeys', (req, res) => {
@@ -197,3 +232,4 @@ module.exports = function(app) {
 		}
 	})
 };
+

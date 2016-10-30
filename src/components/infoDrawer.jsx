@@ -91,7 +91,7 @@ class InfoDrawer extends React.Component {
         <div>
         <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
           <Drawer
-            width={350}
+            width={250}
             open={this.state.open}
           >
             <div style={iconStyle} >
@@ -99,12 +99,13 @@ class InfoDrawer extends React.Component {
               <NavigationClose />
             </IconButton>
             </div>
-            <h3> Menu </h3>
+            <h3 style={{marginLeft: 15}}> Menu </h3>
             <Divider />
-            <MenuItem onTouchTap={() => this.reRoute('/profile')} rightIcon={<EventNote color='#488985' />}> View Events </MenuItem>
+
+            <MenuItem onTouchTap={() => this.reRoute('/events')} rightIcon={<EventNote color='#488985' />}> View Events </MenuItem>
             <MenuItem onTouchTap={() => this.reRoute('/users')} rightIcon={<Person color='#488985'/>}> View Users </MenuItem>
             <Divider />
-            <MenuItem onTouchTap={this.toggleProfile}
+            <MenuItem onTouchTap={() => this.reRoute('/profile')}
                       rightIcon={
                         <Avatar
                           src={this.state.info.profilepic}
@@ -112,17 +113,8 @@ class InfoDrawer extends React.Component {
                         />
                       }
             > Your Profile </MenuItem>
-            <Popover
-              open={this.state.profileOpen}
-              anchorEl={this.state.anchorEl}
-              anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-              targetOrigin={{horizontal: 'left', vertical: 'top'}}
-              onRequestClose={this.handleRequestClose}
-              animation={PopoverAnimationVertical}
-            >
-            <UserDisplay userInfo={this.state.info} resetUserInfo={this.state.resetUserInfo} toggleProfile={this.toggleProfile} toggleDrawer={this.toggleDrawer} type={'profile'}/>
-            </Popover>
-            <MenuItem rightIcon={<UserEvent color='#488985'/>}> Your Events </MenuItem>
+
+            <MenuItem onTouchTap={() => this.reRoute('/profile')} rightIcon={<UserEvent color='#488985'/>}> Your Events </MenuItem>
           </Drawer>
         </MuiThemeProvider>
         <div>
@@ -139,3 +131,14 @@ class InfoDrawer extends React.Component {
 }
 
 module.exports = InfoDrawer
+
+/*            <Popover
+              open={this.state.profileOpen}
+              anchorEl={this.state.anchorEl}
+              anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+              targetOrigin={{horizontal: 'left', vertical: 'top'}}
+              onRequestClose={this.handleRequestClose}
+              animation={PopoverAnimationVertical}
+            >
+            <UserDisplay userInfo={this.state.info} resetUserInfo={this.state.resetUserInfo} toggleProfile={this.toggleProfile} toggleDrawer={this.toggleDrawer} type={'profile'}/>
+            </Popover>*/

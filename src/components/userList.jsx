@@ -9,7 +9,7 @@ const Row = (props) => (
   <div className="row">
     {
       props.row.map((user) => (
-        <div className= "col-md-4 text-center">
+        <div className= "col-md-3">
           <UserDisplay user={user} userInfo={props.userInfo} resetUserInfo={props.resetUserInfo} type='user' />
         </div>
       ))
@@ -29,17 +29,15 @@ class UserList extends React.Component {
       var rows = [];
       var row = [];
       for (var i = 0; i < users.length; i++) {
-        if (i % 3 === 0 && row.length > 0) {
+        if (i % 4 === 0 && row.length > 0) {
           rows.push(row);
           row = [];
         }
-        console.log(users[i])
         row.push(users[i]);
         if (i === users.length - 1 && row.length > 0) {
           rows.push(row);
         }
       }
-      console.log(rows)
       return (
         <div className = "container userList">
           {

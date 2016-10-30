@@ -39,7 +39,8 @@ ReactDOM.render(
       <IndexRoute component={Home} />
       <Route component={InfoDrawer} >
         <Route path="/users" component={UsersPage} onEnter={requireAuth} />
-        <Route path="/profile" component={Events} onEnter={requireAuth} creation={false}/>
+        <Route path="/events" component={Events} onEnter={requireAuth} creation={false}/>
+        <Route path="/profile" component={Profile} onEnter={requireAuth} creation={false}/>
       </Route>
       <Route path="/creation" component={ProfileCreation} onEnter={requireAuth} creation={true}/>
       <Route path="access_token=:token" component={Loading} />

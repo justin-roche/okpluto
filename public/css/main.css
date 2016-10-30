@@ -1,16 +1,39 @@
+@import url('https://fonts.googleapis.com/css?family=Quattrocento|Quicksand');
+
+body {
+  font-family: 'Quattrocento', serif;
+}
+
 .jumbotron {
-  background: url('/assets/cover.jpg') no-repeat center center;
+  background: url('/assets/cover2.jpg') no-repeat center center;
   background-size: cover;
   height: 600px;
 }
+.banner {
+  background: url('/assets/banner.jpg') no-repeat center center;
+  background-size: cover;
+  height: 400px;
+  padding-top: 200px;
+}
 
-h1, h2 {
+.banner h1 {
+  color: white;
+  margin-top: 40px;
+  padding-right: 20px;
+  font-size: 4em;
+}
+
+h1{
   text-align: right;
-  margin-top:100px;
+  margin-top:80px;
+}
+h2 {
+  text-align: right;
+  margin-top:20px;
 }
 
 img {
-  width:140px;
+  width: 140px;
   height: 140px;
 }
 
@@ -36,25 +59,26 @@ img {
 }
 
 .container > h1 {
-  color: #203d3b;
+  font-family: 'Quicksand', sans-serif ;
+  color: #004D40;
   font-size: 9em;
   font-weight: 600;
   text-shadow: 1px 1px #c2c1bd;
 }
 
 .container > h2 {
+  font-family: 'Quicksand', sans-serif;
   font-size: 3em;
-  color: #c2c1bd;
-  text-shadow: 2px 2px #564D49;
+  color: #546E7A;
+  text-shadow: 2px 2px #c2c1bd;
 }
 
 .icons {
-  background-color: gainsboro;
+  background-color: #CFD8DC;
   width: 100%;
   margin: 0px;
   padding: 0px;
   padding-bottom: 40px;
-  border-bottom: 1px solid #768f8d;
 }
 
 .icons > p {
@@ -62,21 +86,20 @@ img {
 }
 
 .team {
-  background-color: whitesmoke;
+  background-color: #ECEFF1;
   padding-top: 40px;
   padding-bottom: 40px;
 }
 
 .section-heading {
   height: 125px;
-  border-top: 1px solid #768f8d;
   text-align: center;
   vertical-align: middle;
-  background-color: gainsboro;
+  background-color: #CFD8DC;
 }
 
 .section-heading.alt {
-  background-color: whitesmoke;
+  background-color: #ECEFF1;
 }
 
 .section-heading > p {
@@ -95,19 +118,45 @@ img {
   height: 300px;
 }
 
+.profile {
+  margin-top: 60px;
+}
+
 .profile .profile-image {
   display: inline-block;
-  width: 60%;
-  height:120%;
+  width: 220px;
+  height: 220px;
   z-index: 1;
   position: relative;
-  padding: 8px;
-  border: 2px solid #70D6CF;
-  margin-top: 20px;
+  border: 5px solid gainsboro
 }
 
 .profile .profile-image img {
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
+}
+
+.profile .profile-info {
+  height: 100%;
+  width: 220px;
+  text-align: center;
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.profile .profile-header {
+  background-color: gainsboro;
+  text-align: left;
+  padding-left: 5px;
+}
+
+/*.profile .profile-edit {
+  margin-right: 80px;
+}*/
+
+.profile-events {
+  margin-top: 60px;
 }
 
 .profile figcaption {
@@ -125,15 +174,18 @@ img {
 }
 
 .profile h3 {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .profile h4 {
+  text-align: left;
+  margin-left: 5px;
   color: #777;
 }
 
-.userList, .profile {
-  margin-top: 100px;
+.userList {
+  margin-top: 30px;
+  width: 95%;
 }
 
 .middle {
@@ -156,4 +208,48 @@ img {
     position: fixed;
     display: inline-block;
     float: left;
+}
+
+.card-img {
+  height: 180px;
+  width: 100%;
+}
+
+.primary-footer small {
+  float: left;
+  font-weight: 400;
+}
+
+.primary-footer {
+  background-color: rgb(0, 77, 64);
+  color: #ECEFF1;
+  font-size: 14px;
+  padding: 44px 15px;
+}
+
+.primary-footer a {
+  color: #ECEFF1;
+}
+
+.primary-footer a:hover {
+  color: #70D6CF;
+  text-decoration: none;
+}
+
+.nav {
+  text-align: right;
+}
+
+.nav li {
+  display: inline-block;
+  margin: 0 10px;
+  vertical-align: top;
+}
+
+.nav li:last-child {
+  margin-right: 0;
+}
+
+.img-circle {
+  cursor: pointer;
 }
