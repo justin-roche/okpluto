@@ -192,7 +192,7 @@ module.exports = function(app) {
 		var dev2 = new RegExp('localhost:8080', 'g')
 		var prod = new RegExp('okpluto.herokuapp.com', 'g')
 		if (req.headers.host.match(dev1) || req.headers.host.match(dev2) || req.headers.host.match(prod)) {
-			console.log('console log');
+			console.log('console log', authPath.auth0);
 			res.status(200).send({auth: authPath.auth0})
 		}
 	})
