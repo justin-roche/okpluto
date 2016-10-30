@@ -231,5 +231,5 @@ module.exports = function(app) {
 			}})
 		}
 	})
-
+}
 
