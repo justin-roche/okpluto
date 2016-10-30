@@ -23,7 +23,7 @@ import InfoDrawer from './components/infoDrawer.jsx'
 
 getInfo().then(authPath => {
   console.log(authPath);
-const auth = new AuthService(authPath.auth.AUTH0_CLIENT_ID, authPath.auth.AUTH0_DOMAIN);
+const auth = new AuthService(authPath.auth.authId, authPath.auth.authDomain);
 
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {

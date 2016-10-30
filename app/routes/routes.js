@@ -3,7 +3,9 @@
 var User = require('../models/users');
 var Event = require('../models/events');
 var request = require('request');
-var authPath = process.env.AUTH0_DOMAIN;
+var authDomain = process.env.AUTH0_DOMAIN;
+var authId = process.env.AUTH0_CLIENT_ID;
+var auth = {id: authId, domain: authDomain};
 var api = process.env.GOOGLE_API;
 var Promise = require('bluebird');
 const googleMaps = require('@google/maps').createClient({
@@ -192,8 +194,8 @@ module.exports = function(app) {
 		var dev2 = new RegExp('localhost:8080', 'g')
 		var prod = new RegExp('okpluto.herokuapp.com', 'g')
 		if (req.headers.host.match(dev1) || req.headers.host.match(dev2) || req.headers.host.match(prod)) {
-			console.log('console log', authPath.auth0);
-			res.status(200).send({auth: authPath.auth0})
+			console.log('console log', auth);
+			res.status(200).send({auth: auth})
 		}
 	})
 };
