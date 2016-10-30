@@ -217,7 +217,7 @@ module.exports = function(app) {
 			res.status(201).send({removedEvent: event})
 		})
 	})
-};
+
 
 	//========Outside APIs Endpoints===========//
 	app.get('/api/shareKeys', (req, res) => {
@@ -231,5 +231,5 @@ module.exports = function(app) {
 			}})
 		}
 	})
-};
+
 
