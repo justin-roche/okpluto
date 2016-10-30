@@ -3,9 +3,6 @@
 var User = require('../models/users');
 var Event = require('../models/events');
 var request = require('request');
-var authDomain = process.env.AUTH0_DOMAIN;
-var authId = process.env.AUTH0_CLIENT_ID;
-var auth = {id: authId, domain: authDomain};
 var api = process.env.GOOGLE_API;
 var Promise = require('bluebird');
 const googleMaps = require('@google/maps').createClient({
@@ -189,13 +186,14 @@ module.exports = function(app) {
 
 	//========Outside APIs Endpoints===========//
 	app.get('/api/shareKeys', (req, res) => {
-
 		var dev1 = new RegExp('127.0.0.1', 'g')
 		var dev2 = new RegExp('localhost:8080', 'g')
 		var prod = new RegExp('okpluto.herokuapp.com', 'g')
 		if (req.headers.host.match(dev1) || req.headers.host.match(dev2) || req.headers.host.match(prod)) {
-			console.log('console log', auth);
-			res.status(200).send({auth: auth})
+			res.status(200).send({auth: {
+				clientId: process.env.AUTH0_CLIENT_ID,
+				domain: process.env.AUTH0_DOMAIN
+			}})
 		}
 	})
 };
