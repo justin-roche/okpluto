@@ -34,7 +34,7 @@ export default class AuthService {
 
       theme: {
         logo: Logo,
-        primaryColor: '#203D3B'
+        primaryColor: 'rgb(0, 77, 64)'
       },
 
       socialButtonStyle: 'small'

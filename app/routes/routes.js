@@ -3,11 +3,10 @@
 var User = require('../models/users');
 var Event = require('../models/events');
 var request = require('request');
-var authPath = require('../../config/auth0');
-var api = require('../../config/api.js');
+var api = process.env.GOOGLE_API;
 var Promise = require('bluebird');
 const googleMaps = require('@google/maps').createClient({
-	key: api.API_KEY
+	key: api
 });
 
 module.exports = function(app) {
@@ -33,7 +32,6 @@ module.exports = function(app) {
 
 	//Find distance btwn coordinates
 	app.post('/api/distance', (req, res) => {
-		console.log(req.body)
 		var getDistance = function(originCoor, destCoors) {
 			return new Promise((resolve, reject) => {
 				googleMaps.distanceMatrix({
@@ -48,7 +46,6 @@ module.exports = function(app) {
 
 		getDistance(JSON.parse(req.body.origin), JSON.parse(req.body.destinations))
 		.then(results => {
-			console.log(results.json.rows[0].elements)
 			res.status(200).send(results.json.rows[0].elements)
 		})
 	})
@@ -70,7 +67,6 @@ module.exports = function(app) {
 				console.log(err);
 				res.status(404).send("Database error, no users found")
 			}
-			//console.log(users)
 			res.status(201).send({users: users});
 		});
 	});
@@ -79,8 +75,10 @@ module.exports = function(app) {
 		//Auth0 user ID
 		var id = req.body.id;
 		//POST path to retrieve user info from Auth0
-		var url = 'https://' + authPath.auth0.AUTH0_DOMAIN + '/tokeninfo';
+		console.log(process.env.AUTH0_DOMAIN);
+		var url = 'https://' + process.env.AUTH0_DOMAIN + '/tokeninfo';
 		request.post(url, { json: {id_token: id} } , (err, response) => {
+			console.log(response.body);
 			if (err) console.log(err)
 			//Look for user in mongoDB
 			User.findOne({
@@ -150,6 +148,21 @@ module.exports = function(app) {
 		});
 	});
 
+	app.get('/queryEvents/dbId', (req, res) => {
+		Event.find({attendees: req.query.dbId})
+		.exec((err, attendingEvents) => {
+			Event.find({creator: req.query.dbId})
+			.exec((err, createdEvents) => {
+				if (err) {
+				console.log(err);
+				res.status(404).send("Database error, no events found")
+			} else {
+				res.status(201).send({attendingEvents: attendingEvents, createdEvents, createdEvents})
+			}
+			})
+		})
+	})
+
 	app.post('/api/events', (req, res) => {
 		req.body = JSON.parse(req.body.data);
 		new Event ({
@@ -169,7 +182,6 @@ module.exports = function(app) {
 	})
 
 	app.put('/api/events/add', (req, res) => {
-		console.log(req.body)
 		Event.findById(req.body.eventId, (err, event) => {
 			let attendees = event.attendees;
 			if (attendees.indexOf(req.body.userId) === -1) {
@@ -181,7 +193,31 @@ module.exports = function(app) {
 			})
 		})
 
+	});
+
+	app.put('/api/events/remove', (req, res) => {
+		Event.findById(req.body.eventId, (err, event) => {
+			let attendees = event.attendees;
+			let index = -1;
+			for (var i = 0; i < attendees.length; i++) {
+				if (attendees[i] === req.body.userId) {
+					index = i;
+					break;
+				}
+			}
+			event.attendees.splice(index, 1)
+			event.save((err, updatedEvent) => {
+				res.status(200).send({updatedEvent: updatedEvent});
+			})
+		})
 	})
+
+	app.delete('/api/events', (req, res) => {
+		Event.findByIdAndRemove(req.body.eventId, (err, event) => {
+			res.status(201).send({removedEvent: event})
+		})
+	})
+
 
 	//========Outside APIs Endpoints===========//
 	app.get('/api/shareKeys', (req, res) => {
@@ -189,7 +225,11 @@ module.exports = function(app) {
 		var dev2 = new RegExp('localhost:8080', 'g')
 		var prod = new RegExp('okpluto.herokuapp.com', 'g')
 		if (req.headers.host.match(dev1) || req.headers.host.match(dev2) || req.headers.host.match(prod)) {
-			res.status(200).send({auth: authPath.auth0})
+			res.status(200).send({auth: {
+				clientId: process.env.AUTH0_CLIENT_ID,
+				domain: process.env.AUTH0_DOMAIN
+			}})
 		}
 	})
-};
+}
+

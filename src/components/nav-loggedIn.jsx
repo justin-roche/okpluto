@@ -12,22 +12,24 @@ import { hashHistory } from 'react-router';
 class NavLoggedIn extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
   }
 
   render () {
     const barStyle= {
-      backgroundColor: Colors.grey100,
       position: 'fixed',
       top: '0px'
     }
     const titleStyle = {
-      textAlign: 'left'
+      textAlign: 'left',
+      fontFamily: 'Quicksand, sans-serif',
+      fontWeight: 'bold',
+      fontSize: 36
     }
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
         <AppBar
           style={barStyle}
+          secondary={true}
           title={<span style={titleStyle}>Ok Pluto</span>}
           iconElementRight={<FlatButton label="Logout" />}
           onLeftIconButtonTouchTap={this.props.toggleDrawer}

@@ -8,27 +8,32 @@ const Row = (props) => (
   <div className="row">
     {
       props.row.map((event) => (
-        <div className= "col-md-3 text-center">
-          <EventDisplay event={event} type='user' />
+        <div className={props.class}>
+          <EventDisplay event={event} type='user' userInfo={props.userInfo}/>
         </div>
       ))
     }
   </div>
 )
 
-class UserList extends React.Component {
+class EventList extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    //sort by distance from user
+    var rowLength = 4;
+    var className = "col-md-3 text-center";
+    if (this.props.type === "profile") {
+      rowLength = 3;
+      className = "col-md-4 text-center"
+    }
     if (this.props.events.length) {
       var events = this.props.events
       var rows = [];
       var row = [];
       for (var i = 0; i < events.length; i++) {
-        if (i % 3 === 0 && row.length > 0) {
+        if (i % rowLength === 0 && row.length > 0) {
           rows.push(row);
           row = [];
         }
@@ -41,10 +46,14 @@ class UserList extends React.Component {
         <div className = "container userList">
           {
             rows.map(row => (
-              <Row row={row} />
+              <Row row={row} userInfo={this.props.userInfo} class={className}/>
             ))
           }
       </div>
+      )
+    } else if (this.props.noEvents) {
+      return (
+        <h3 className="middle">No Events to Show</h3>
       )
     } else {
       return (
@@ -54,4 +63,4 @@ class UserList extends React.Component {
   }
 }
 
-module.exports = UserList;
+module.exports = EventList;

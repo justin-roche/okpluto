@@ -4,11 +4,12 @@ import React from 'react';
 import Loading from './loading.jsx'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MyTheme from '../theme/theme.js';
 import { findUser } from '../services/userServices.js'
-import { addPerson } from '../services/eventServices.js'
+import { addPerson, removePerson, deleteEvent } from '../services/eventServices.js'
 
 const calendar = {
   0: "Jan",
@@ -39,12 +40,19 @@ class EventDisplay extends React.Component {
     super(props)
     this.state = {
       attendees: [],
-      eventId: this.props.event._id
+      eventId: this.props.event._id,
+      open: false,
+      joined: false,
+      message: "Joined event successfully"
     };
     this.join = this.join.bind(this);
+    this.unjoin = this.unjoin.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
+    this.handleEventButtonClick = this.handleEventButtonClick.bind(this);
   }
 
   componentWillMount() {
+    let self = this;
     findUser(this.props.event.creator)
     .then(user => {
       let name = user.firstname + ' ' + user.lastname
@@ -52,6 +60,9 @@ class EventDisplay extends React.Component {
     });
     let attendees = this.state.attendees;
     this.props.event.attendees.forEach(attendee => {
+      if (attendee === this.props.userInfo._id) {
+        self.setState({joined: true})
+      }
       findUser(attendee)
       .then(person => {
         let people = attendees;
@@ -60,12 +71,62 @@ class EventDisplay extends React.Component {
       });
     });
     this.setState({eventPic: eventPics[this.props.event.category]});
-    console.log(this.state)
   }
 
   join() {
     let eventId = this.state.eventId;
-    addPerson(eventId)
+    addPerson(eventId);
+    let attendees = this.state.attendees;
+    attendees.push(this.props.userInfo.firstname);
+    this.setState({attendees: attendees})
+      this.setState({
+        joined: true,
+        message: "Joined event successfully"
+      });
+    this.setState({open: true});
+  }
+
+  unjoin() {
+    const self = this
+    let attendees = this.state.attendees;
+    let index = attendees.indexOf(this.props.userInfo.firstname);
+    attendees.splice(index, 1);
+    this.setState({attendees: attendees})
+    removePerson(this.state.eventId)
+    .then(updatedEvent => {
+      self.setState({
+        joined: false,
+        message: "Left event successfully"
+      });
+      self.setState({open: true});
+    })
+  }
+
+  getTitle() {
+    if (this.props.event.creator === this.props.userInfo._id) {
+      return 'Cancel Event'
+    }
+    return this.state.joined ? 'Leave' : 'Join'
+  }
+
+  handleEventButtonClick() {
+    let self = this;
+    if (this.props.event.creator === this.props.userInfo._id) {
+      deleteEvent(this.props.event._id)
+      .then(deletedEvent => {
+      self.setState({
+        joined: false,
+        message: `Canceled event ${self.props.event.eventname}`
+      });
+      self.setState({open: true});
+      })
+    } else {
+      return this.state.joined ? this.unjoin() : this.join()
+    }
+  }
+
+  handleRequestClose() {
+    this.setState({open: false});
   }
 
   render () {
@@ -92,14 +153,20 @@ class EventDisplay extends React.Component {
           <strong>Creator:</strong> {this.state.creator}<br />
           <strong>Who's going:</strong>{this.state.attendees.map((person, i) => {
             if (i !== this.state.attendees.length - 1) {
-              person += ',';
+              person += ', ';
             }
             return person
           })}<br />
           <strong>When:</strong> {calendar[date.getMonth()]} {date.getDate()} at {hours}:{min} {ampm} {zone}
         </CardText>
         <CardActions>
-          <FlatButton label="Join" onClick={this.join}/>
+          <FlatButton label={this.getTitle()} onClick={this.handleEventButtonClick}/>
+          <Snackbar
+            open={this.state.open}
+            message={this.state.message}
+            autoHideDuration={3000}
+            onRequestClose={this.handleRequestClose}
+          />
         </CardActions>
       </Card>
       </MuiThemeProvider>

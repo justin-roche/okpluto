@@ -22,12 +22,12 @@ import InfoDrawer from './components/infoDrawer.jsx'
 
 
 getInfo().then(authPath => {
-const auth = new AuthService(authPath.auth.AUTH0_CLIENT_ID, authPath.auth.AUTH0_DOMAIN);
+  const auth = new AuthService(authPath.auth.clientId, authPath.auth.domain);
 
-const requireAuth = (nextState, replace) => {
-  if (!auth.loggedIn()) {
-    replace ({ pathname: '/'})
-  }
+  const requireAuth = (nextState, replace) => {
+    if (!auth.loggedIn()) {
+      replace ({ pathname: '/'})
+    }
 }
 
 //const passProps = ()
@@ -39,7 +39,8 @@ ReactDOM.render(
       <IndexRoute component={Home} />
       <Route component={InfoDrawer} >
         <Route path="/users" component={UsersPage} onEnter={requireAuth} />
-        <Route path="/profile" component={Events} onEnter={requireAuth} creation={false}/>
+        <Route path="/events" component={Events} onEnter={requireAuth} creation={false}/>
+        <Route path="/profile" component={Profile} onEnter={requireAuth} creation={false}/>
       </Route>
       <Route path="/creation" component={ProfileCreation} onEnter={requireAuth} creation={true}/>
       <Route path="access_token=:token" component={Loading} />

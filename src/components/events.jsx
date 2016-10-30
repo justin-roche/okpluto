@@ -12,6 +12,8 @@ import MenuItem from 'material-ui/MenuItem';
 import MyTheme from '../theme/theme.js';
 import EventList from './eventList.jsx'
 import { getDistance } from '../services/distanceServices'
+import Banner from './banner.jsx';
+import Footer from './footer.jsx';
 
 class Events extends React.Component {
   constructor(props) {
@@ -40,32 +42,33 @@ class Events extends React.Component {
         }
       })
       //Find distance between user and each event
-      getDistance({lat: this.props.userInfo.lat, lng: this.props.userInfo.lng}, eventDests)
-      .then(distances => {
-        console.log(distances)
-        events.events.forEach(event => {
-          if (event.tracker !== undefined && distances[event.tracker].status === "OK") {
-            event.distance = Number(distances[event.tracker].distance.value)
-          }
-        })
-        // Sort by distance
-        var noDistInfo = [];
-        var eventsDistInfo = []
-        events.events.forEach(event => {
-          if (event.distance === undefined) {
-            noDistInfo.push(event)
-          } else {
-            eventsDistInfo.push(event)
-          }
-        });
-        eventsDistInfo.sort((a, b) => {
-          return a.distance < b.distance ? -1 : 1
-        })
-        let sortedEvents = eventsDistInfo.concat(noDistInfo)
+      // getDistance({lat: this.props.userInfo.lat, lng: this.props.userInfo.lng}, eventDests)
+      // .then(distances => {
+      //   console.log(distances)
+      //   events.events.forEach(event => {
+      //     if (event.tracker !== undefined && distances[event.tracker].status === "OK") {
+      //       event.distance = Number(distances[event.tracker].distance.value)
+      //     }
+      //   })
+      //   // Sort by distance
+      //   var noDistInfo = [];
+      //   var eventsDistInfo = []
+      //   events.events.forEach(event => {
+      //     if (event.distance === undefined) {
+      //       noDistInfo.push(event)
+      //     } else {
+      //       eventsDistInfo.push(event)
+      //     }
+      //   });
+      //   eventsDistInfo.sort((a, b) => {
+      //     return a.distance < b.distance ? -1 : 1
+      //   })
+      //   let sortedEvents = eventsDistInfo.concat(noDistInfo)
+      let sortedEvents = events.events
         //Set events into state after getting distance
         self.setState({events: sortedEvents})
         self.setState({displayedEvents: sortedEvents})
-      })
+      // })
       //Set Searchable options
       var searchArray = [];
       events.events.forEach(event => {
@@ -91,18 +94,13 @@ class Events extends React.Component {
   }
 
   render () {
-    var style = {
-      'top': '40px',
-      'left': '20px',
-      'float': 'right',
-      'margin-right': '20px'
-    }
     return (
       <div>
         <NavLoggedIn auth={this.props.auth} toggleDrawer={this.props.toggleDrawer} />
+        <Banner display={'Local Users'}/>
         <div className="row">
           <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
-               <AutoComplete style={style}
+               <AutoComplete style={{marginLeft: '75%'}}
                  floatingLabelText="Search Events"
                  filter={AutoComplete.fuzzyFilter}
                  dataSource={this.state.searchSource}
@@ -113,9 +111,10 @@ class Events extends React.Component {
                />
           </MuiThemeProvider>
         </div>
-        <div className="row">
-            <EventList events={this.state.displayedEvents} />
+        <div className="row" style={{marginBottom: 20}}>
+            <EventList events={this.state.displayedEvents} userInfo={this.props.userInfo}/>
         </div>
+        <Footer/>
       </div>
     )
   }

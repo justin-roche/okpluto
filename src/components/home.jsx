@@ -5,6 +5,7 @@ import {ButtonToolbar, Button, Jumbotron} from 'react-bootstrap';
 import AuthService from '../utils/AuthService.jsx';
 import Navigation from './nav.jsx';
 import Auth0Lock from '../../node_modules/auth0-lock';
+import Footer from './footer.jsx';
 const House = '/assets/house.png';
 const Connect = '/assets/connect.png';
 const MeetUp = '/assets/meetUp.png';
@@ -35,7 +36,7 @@ class TeamIcon extends React.Component {
 
   render() {
     return (
-      <div className="col-md-3">
+      <div className="col-md-3" >
         <a href={this.props.link}><img src={this.props.url} className="img-circle"/></a>
         <h3>{this.props.display}</h3>
       </div>
@@ -52,7 +53,8 @@ class Home extends React.Component {
         <div className="jumbotron main-image" >
           <div className="container">
             <h1>Ok Pluto</h1>
-            <h2>Online playground for your best friend</h2>
+            <h2>Online playground </h2>
+            <h2>for your best friend</h2>
           </div>
         </div>
 
@@ -83,8 +85,8 @@ class Home extends React.Component {
             <TeamIcon url={Ivey} display={"Ivey Topaz"} link={"https://www.linkedin.com/in/ivey-topaz-765a85124"}/>
           </div>
         </div>
+        <Footer />
       </div>
-
     )
   }
 

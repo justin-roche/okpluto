@@ -23,7 +23,7 @@ class ProfileEdit extends React.Component {
   render () {
     return (
         <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
-          <div className="middle">
+          <div>
           <TextField
             hintText="First Name"
             floatingLabelText="First Name"
