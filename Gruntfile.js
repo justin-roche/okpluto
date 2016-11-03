@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 // Opens up mongod on local machine
     shell: {
       mongo: {
-        command: 'mongod',
+        command: 'sudo mongod',
         options: {
           async: true
         }

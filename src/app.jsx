@@ -8,7 +8,7 @@ import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import AuthService from './utils/AuthService.jsx';
 import $ from 'jquery';
 import Home from './components/home.jsx';
-import { auth0 } from '../config/auth0.js';
+import auth0 from '../config/auth0.js';
 import UsersPage from './components/usersPage.jsx'
 import Container from './components/container.jsx'
 import Profile from './components/profile.jsx'
@@ -19,6 +19,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import InfoDrawer from './components/infoDrawer.jsx'
 
 // Setting up auth service
+console.log(auth0);
 const auth = new AuthService(auth0.AUTH0_CLIENT_ID, auth0.AUTH0_DOMAIN);
 
 
