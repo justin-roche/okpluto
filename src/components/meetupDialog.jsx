@@ -119,6 +119,13 @@ class MeetupDialog extends React.Component {
             label="Let's Meetup!"
             primary={true}
           />
+
+          <RaisedButton
+            onTouchTap={this.handleOpen}
+            label="Let's Chat!"
+            primary={true}
+          />
+
           <Dialog
             title="Meetup Creation"
             titleStyle={{textAlign: 'center'}}
