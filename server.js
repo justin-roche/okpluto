@@ -19,8 +19,12 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
   if (req.query.dbId) {
     if (req.path === '/api/users') {
+      //changes search for all users to search for one user if there is a dbId provided
+      console.log('changing req.path from /api/users to /query/dbId')
       req.url = '/query/dbId';
     } else if (req.path === '/api/events') {
+      //getting events for one user
+      console.log('changing req.path from /api/events to /queryEvents/dbId');
       req.url = '/queryEvents/dbId'
     }
   }

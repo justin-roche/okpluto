@@ -35,6 +35,7 @@ module.exports = function(app) {
 
 	//Find distance btwn coordinates
 	app.post('/api/distance', (req, res) => {
+		console.log('hitting /api/distance');
 		var getDistance = function(originCoor, destCoors) {
 			return new Promise((resolve, reject) => {
 				googleMaps.distanceMatrix({
@@ -56,29 +57,34 @@ module.exports = function(app) {
 	//======User End Points=======//
 
 	app.get('/query/dbId', (req, res) => {
+		console.log('hitting query/dbId');
 		User.findById(req.query.dbId)
 		.exec((err, user) => {
 			if (err) console.log(err);
+			console.log('sending user for query/dbId');
 			res.status(201).send(user)
 		});
 	});
   // GET request to return all users from db
 	app.get('/api/users', (req, res) => {
+		console.log('hitting api/users');
 		User.find()
 		.exec((err, users) => {
 			if (err) {
 				console.log(err);
 				res.status(404).send('Database error, no users found')
 			}
+			console.log('sending back user');
 			res.status(201).send({users: users});
 		});
 	});
 
 	app.post('/signin', (req, res) => {
+		console.log('hitting /signin');
 		//Auth0 user ID
 		var id = req.body.id;
 		//POST path to retrieve user info from Auth0
-		var url = 'https://' + authPath.auth0.AUTH0_DOMAIN + '/tokeninfo';
+		var url = 'https://' + authPath.AUTH0_DOMAIN + '/tokeninfo'; //<--
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
 			//Look for user in mongoDB
@@ -87,6 +93,7 @@ module.exports = function(app) {
 			}).exec((err, user) => {
 				//Add user if they don't exist
 				if (!user) {
+					console.log('no user found');
 					//get user info supplied through login / signup from FB, Google and Auth0
 					var userData = response.body;
 					//For signups through Auth0 collect metadata
@@ -106,10 +113,12 @@ module.exports = function(app) {
 						profilepic: userData.picture,
 						username: 'anonymous' + Math.floor(Math.random()*100000000)
 					}).save((err, user) => {
+						console.log('saved user');
 						if (err) console.log(err);
 						res.status(200).send({user: user, creation: true});
 					})
 				} else {
+					console.log('sending user');
 					user.creation = false;
 					res.status(200).send({user: user, creation: false});
 				}
