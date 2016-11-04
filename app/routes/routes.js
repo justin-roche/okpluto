@@ -89,6 +89,7 @@ module.exports = function(app) {
 
 		//POST path to retrieve user info from Auth0
 		var url = 'https://' + authPath.AUTH0_DOMAIN + '/tokeninfo';
+
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
 			
