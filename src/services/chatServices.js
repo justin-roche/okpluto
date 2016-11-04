@@ -6,9 +6,13 @@ const createSocket = function() {
   socket = io.connect('http://localhost:8080');
   
   socket.on('connect', function(data) {
-    //var dbId = localStorage.getItem('mongoUserId');
-    console.log('user id is:', dbId);
+    var dbId = localStorage.getItem('mongoUserId');
     console.log('socket connected');
+    console.log('emitting newAvailableUser', dbId);
+    
+    //send new available user event to server so it can emit to all users and they 
+    //update their 'chat available' display for the user
+    socket.emit('onlineUser', {sender: dbId});
   });
 
   socket.on('message',function(data){
@@ -37,9 +41,11 @@ const registerMessageDisplay = function(callback){
 
 //this sends user ids to the card components that display if users are online
 const registerAvailableDisplay = function(callback){
-  socket.on('newAvailableUser', function(data){
+  socket.on('onlineUsers', function(data){
     console.log('new available user from socket', data);
-    callback(data);
+    data.users.forEach(function(user){
+      callback(user);
+    });
   });
 }
 
