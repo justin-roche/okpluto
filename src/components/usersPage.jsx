@@ -18,7 +18,11 @@ class UsersPage extends React.Component {
 
   constructor(props) {
     super(props);
+
+    //create socket here for implicit authentication
+    //as this is a restricted route
     createSocket();
+    
     this.state = {
       users: [],
       search: '',

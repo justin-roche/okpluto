@@ -61,7 +61,7 @@ module.exports = function(app) {
 		User.findById(req.query.dbId)
 		.exec((err, user) => {
 			if (err) console.log(err);
-			console.log('sending user for query/dbId');
+			console.log('sending user for query/dbId', req.query.dbId);
 			res.status(201).send(user)
 		});
 	});

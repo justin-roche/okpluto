@@ -16,7 +16,7 @@ const getLatLng = function(address) {
 
 // Update user info
 const updateDb = function(newProps) {
-  console.log('updating db');
+  console.log('updating db with newProps', newProps);
   return new Promise((resolve, reject) => {
     $.ajax({
       url: 'api/users',
@@ -64,7 +64,7 @@ const getUsers = function() {
 
 //POST to API to get mongoDB user info
 const saveUser = function(idToken) {
-  console.log('savUser by idToken');
+  console.log('savUser by idToken', idToken);
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/signin',

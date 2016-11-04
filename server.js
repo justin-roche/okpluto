@@ -49,15 +49,31 @@ httpServer.listen(port, function() {
 	console.log('server running! :)');
 })
 
+var chatManager = function(){
 
+  
+
+}
+
+var clients = {};
 io.on('connection', function(client) { 
     var id = client.id; 
     console.log('socket connection, client ID', id);
 
-    client.on('joinChat', function(data) {
-      console.log('joinChat event received by socket, data:', data);
-      //io.to(socketid).emit('message', 'for your eyes only');
+    client.on('register')
+    //io.emit('newAvailableUser',id);
+
+    client.on('requestChat', function(data) {
+      console.log('sending request chat, data', data)
+      io.to(data.partner).emit('requestChat');
     });
+
+    //the data for the partner match is included from the client
+    client.on('message', function(data) {
+      console.log('sending message',data);
+      io.to(data.partner).emit('message',JSON.stringify(data.message));
+    });
+
 });
 
 
