@@ -60,7 +60,7 @@ io.on('connection', function(client) {
     var id = client.id; 
     console.log('socket connection, client ID', id);
 
-    client.on('register')
+    //client.on('register')
     //io.emit('newAvailableUser',id);
 
     client.on('requestChat', function(data) {
