@@ -46,9 +46,6 @@ class UserDisplay extends React.Component {
               resetUserInfo={this.props.resetUserInfo}
               toggleDrawer={this.props.toggleDrawer}
             />
-
-
-
           </CardActions>
         </Card>
       </div>
