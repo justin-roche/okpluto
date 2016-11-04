@@ -120,15 +120,15 @@ class ProfileCreation extends React.Component {
     if (Object.keys(errors).length === 0) {
       this.handleNext();
       if (this.state.stepIndex === 1) {
-
-        updateUser(this.state)
+        console.log('updating user in profileCreation');
+        updateUser(this.state)  //updates lat and longitude
           .then(function (user) {
             hashHistory.push('/users')
         });
       }
     }
     this.setState({"errorText": errors});
-    console.log(this.state);
+    console.log('handleSubmit state',this.state);
   }
 
 // Steps to next part of sign up form

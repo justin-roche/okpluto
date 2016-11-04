@@ -16,6 +16,7 @@ const getLatLng = function(address) {
 
 // Update user info
 const updateDb = function(newProps) {
+  console.log('updating db with newProps', newProps);
   return new Promise((resolve, reject) => {
     $.ajax({
       url: 'api/users',
@@ -29,6 +30,7 @@ const updateDb = function(newProps) {
 
 // Add latitude and longitude values then make ajax call to update user info
 const updateUser = function(newProps) {
+  console.log('updating user in updateUser');
   newProps.dbId = localStorage.getItem('mongoUserId');
   return new Promise((resolve, reject) => {
     if (newProps.loc) {
@@ -36,6 +38,7 @@ const updateUser = function(newProps) {
         .then(function(results) {
           newProps.lat = results.lat;
           newProps.lng = results.lng;
+          console.log('calling updateDb from updateUser');
           updateDb(newProps)
           .then(resolve)
         });
@@ -49,6 +52,7 @@ const updateUser = function(newProps) {
 // Get all users from db
 const getUsers = function() {
   return new Promise((resolve, reject) => {
+    console.log('getting all users');
     $.ajax({
       url: 'api/users',
       type: 'GET',
@@ -60,6 +64,7 @@ const getUsers = function() {
 
 //POST to API to get mongoDB user info
 const saveUser = function(idToken) {
+  console.log('savUser by idToken', idToken);
   return new Promise((resolve, reject) => {
     $.ajax({
       url: '/signin',
@@ -73,6 +78,7 @@ const saveUser = function(idToken) {
 
 // Get current user's info from db
 const findUser = function(dbId) {
+  console.log('finding User in db by dbId')
   dbId = dbId || localStorage.getItem('mongoUserId');
   return new Promise((resolve, reject) => {
     $.ajax({
