@@ -83,13 +83,15 @@ module.exports = function(app) {
 		console.log('hitting /signin');
 		//Auth0 user ID
 		var id = req.body.id;
-		console.log("auth0 req body", req.body);
+
 		//POST path to retrieve user info from Auth0
 		var url = 'https://' + authPath.AUTH0_DOMAIN + '/tokeninfo';
 
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
 			//Look for user in mongoDB
+			//console.log("auth0 uers data", response.body);
+			
 			User.findOne({
 				'id': response.body.user_id
 			}).exec((err, user) => {
@@ -122,6 +124,7 @@ module.exports = function(app) {
 				} else {
 					console.log('sending user');
 					user.creation = false;
+					
 					res.status(200).send({user: user, creation: false});
 				}
 			})
