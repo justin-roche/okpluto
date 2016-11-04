@@ -3,6 +3,11 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var httpServer = require('http').createServer(app);
+//socket.io requires httpServer; current version of express 
+//is actually just middleware anyway
+
+var io = require('socket.io')(httpServer);
 
 // setting port
 var port = process.env.PORT || 8080;
@@ -40,9 +45,20 @@ app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
 // routes
 require('./app/routes/routes')(app)
 
-app.listen(port, function() {
+httpServer.listen(port, function() {
 	console.log('server running! :)');
 })
+
+
+io.on('connection', function(client) { 
+    var id = client.id; 
+    console.log('socket connection, client ID', id);
+
+    client.on('joinChat', function(data) {
+      console.log('joinChat event received by socket, data:', data);
+      //io.to(socketid).emit('message', 'for your eyes only');
+    });
+});
 
 
 exports = module.exports = app; // expose our app

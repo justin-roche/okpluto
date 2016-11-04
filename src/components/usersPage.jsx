@@ -10,6 +10,7 @@ import AutoComplete from 'material-ui/AutoComplete';
 import MenuItem from 'material-ui/MenuItem';
 import MyTheme from '../theme/theme.js';
 import { getDistance } from '../services/distanceServices';
+import { createSocket } from '../services/chatServices';
 import Banner from './banner.jsx';
 import FooterLoggedIn from './footer-loggedIn.jsx';
 
@@ -17,6 +18,7 @@ class UsersPage extends React.Component {
 
   constructor(props) {
     super(props);
+    createSocket();
     this.state = {
       users: [],
       search: '',
