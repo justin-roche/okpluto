@@ -158,7 +158,7 @@ module.exports = function(app) {
 			res.status(201).send({events: events});
 		});
 	});
-
+//change
 	app.get('/queryEvents/dbId', (req, res) => {
 		Event.find({attendees: req.query.dbId})
 		.exec((err, attendingEvents) => {
