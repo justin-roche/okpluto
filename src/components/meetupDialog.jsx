@@ -13,11 +13,13 @@ import MyTheme from '../theme/theme.js';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
-import MeetupCreation from './meetupCreation.jsx'
+import MeetupCreation from './meetupCreation.jsx';
+// import ChatCreation from './chatCreation.jsx';
 import Snackbar from 'material-ui/Snackbar';
 import * as Colors from 'material-ui/styles/colors';
 //Services
 import eventServices from '../services/eventServices.js';
+import chatServices from '../services/chatServices.js';
 
 class MeetupDialog extends React.Component {
   constructor(props) {
@@ -33,6 +35,7 @@ class MeetupDialog extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
+    // this.handleOpenChat = this.handleOpenChat.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validate = this.validate.bind(this);
@@ -42,6 +45,10 @@ class MeetupDialog extends React.Component {
   handleOpen() {
     this.setState({open: true});
   }
+
+  // handleOpenChat() {
+  //   this.setState({open: true})
+  // }
 
   handleClose() {
     this.setState({open: false});
@@ -110,6 +117,8 @@ class MeetupDialog extends React.Component {
       />
     ];
 
+
+
     //autoScrollBodyContent within Dialog is super important when you're wondering why all of your form fields are not showing up
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
@@ -117,12 +126,6 @@ class MeetupDialog extends React.Component {
           <RaisedButton
             onTouchTap={this.handleOpen}
             label="Let's Meetup!"
-            primary={true}
-          />
-
-          <RaisedButton
-            onTouchTap={this.handleOpen}
-            label="Let's Chat!"
             primary={true}
           />
 
@@ -157,7 +160,11 @@ class MeetupDialog extends React.Component {
             autoHideDuration={3000}
             onRequestClose={this.handleSnackbarClose}
           />
+
+
+
         </div>
+
       </MuiThemeProvider>
     )
   }
