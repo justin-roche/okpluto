@@ -4,25 +4,26 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
 // Opens up mongod on local machine
-    // shell: {
-    //   mongo: {
-    //     command: 'sudo mongod',
-    //     options: {
-    //       async: true
-    //     }
-    //   }
-    // },
+    shell: {
+      mongo: {
+        command: 'mongod',
+        options: {
+          async: true
+        }
+      }
+    },
+
 
 // Allows nodemon and browserify watch to run simultaneously
 // in the same terminal tab/window
-    // concurrent: {
-    //   target: {
-    //     tasks: ['nodemon', 'watch'],
-    //     options: {
-    //         logConcurrentOutput: true
-    //     }
-    //   }
-    // },
+    concurrent: {
+      target: {
+         tasks: ['nodemon', 'watch'],
+         options: {
+             logConcurrentOutput: true
+         }
+       }
+     },
 
 // Watches all files in src for changes
 // rebuilds bundle.js file on change

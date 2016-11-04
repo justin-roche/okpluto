@@ -1,7 +1,8 @@
 "use strict";
 
 import React from 'react';
-import DialogButton from './dialogButton.jsx'
+import DialogButton from './dialogButton.jsx';
+import ChatCreation from './chatCreation.jsx';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
@@ -45,6 +46,9 @@ class UserDisplay extends React.Component {
               resetUserInfo={this.props.resetUserInfo}
               toggleDrawer={this.props.toggleDrawer}
             />
+
+
+
           </CardActions>
         </Card>
       </div>
