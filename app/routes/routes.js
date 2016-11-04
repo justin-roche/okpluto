@@ -84,7 +84,8 @@ module.exports = function(app) {
 		//Auth0 user ID
 		var id = req.body.id;
 		//POST path to retrieve user info from Auth0
-		var url = 'https://' + authPath.AUTH0_DOMAIN + '/tokeninfo'; //<--
+		var url = 'https://' + authPath.AUTH0_DOMAIN + '/tokeninfo';
+
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
 			//Look for user in mongoDB
