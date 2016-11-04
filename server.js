@@ -20,6 +20,10 @@ var db = require('./config/db');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use((req,res,next)=> {
+  console.log(`${req.method} AT ${req.url}`)
+  next();
+});
 //Route queries searches for db
 app.use((req, res, next) => {
   if (req.query.dbId) {

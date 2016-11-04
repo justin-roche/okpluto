@@ -83,6 +83,7 @@ module.exports = function(app) {
 		console.log('hitting /signin');
 		//Auth0 user ID
 		var id = req.body.id;
+		console.log("auth0 req body", req.body);
 		//POST path to retrieve user info from Auth0
 		var url = 'https://' + authPath.AUTH0_DOMAIN + '/tokeninfo';
 
