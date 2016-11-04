@@ -89,12 +89,10 @@ module.exports = function(app) {
 
 		//POST path to retrieve user info from Auth0
 		var url = 'https://' + authPath.AUTH0_DOMAIN + '/tokeninfo';
-
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
 			
 			//gets facebook posts
-<<<<<<< 45bff8cee54e7bbebd862ab0517f303db0b728f9
 			if(response.body.identities[0].provider === 'facebook'){
 				util.getUserAccessKeys(response.body.user_id)
 				.then((identities) => {

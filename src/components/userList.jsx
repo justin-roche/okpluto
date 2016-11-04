@@ -47,7 +47,7 @@ class UserList extends React.Component {
         <div className = "container userList">
           {
             rows.map(row => (
-              <Row row={row} userInfo={this.props.userInfo} resetUserInfo={this.props.resetUserInfo} />
+              <Row row={row} userInfo={this.props.userInfo} key={this.props.userInfo._id} resetUserInfo={this.props.resetUserInfo} />
             ))
           }
         </div>
@@ -59,7 +59,5 @@ class UserList extends React.Component {
     }
   }
 }
-
-
 
 module.exports = UserList;

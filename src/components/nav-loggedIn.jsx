@@ -29,7 +29,6 @@ class NavLoggedIn extends React.Component {
       <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
         <AppBar
           style={barStyle}
-          secondary={true}
           title={<span style={titleStyle}>Ok Pluto</span>}
           iconElementRight={<FlatButton label="Logout" />}
           onLeftIconButtonTouchTap={this.props.toggleDrawer}
