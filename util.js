@@ -35,7 +35,6 @@ const getUserAccessKeys = function(userId) {
                     reject(err);
                 } 
                 let fbAccessKey = JSON.parse(response.body).identities[0].access_token;
-                console.log("==== facebook acess key ==>", fbAccessKey);
                 resolve(JSON.parse(response.body).identities);
             });
         });
@@ -43,17 +42,37 @@ const getUserAccessKeys = function(userId) {
 };
 
 const getFaceBookPosts = function(fbAccessKey) {
+    let posts = [];
+    let url = `https://graph.facebook.com/v2.8/me/posts?access_token=${fbAccessKey}`;
+    let page = 1;
 
-    request({
-        method: 'GET',
-        url: 'https://graph.facebook.com/v2.8/me/posts?access_token=' + fbAccessKey,
-    }, (err,response,body) => {
-        if(err){
-            console.log("fb error", err);
-        }
-        console.log("posts from facebook api ====>", body);
-    }); 
-} 
+    function recursivePostFinder(url, cb) {
+        request.get(url, (err, responseObject) => {
+            if(err){
+                console.log("error in recursive get", err);
+            } 
+            responseObject = JSON.parse(responseObject.body);
+
+            if(responseObject.data.length === 0) {
+                cb(posts);
+
+            } else {
+                responseObject.data.forEach((postObject) => {
+                    posts.push(postObject);
+                });
+
+                console.log(`added posts from page ${page}`);
+                page++;
+
+                recursivePostFinder(responseObject.paging.next, cb);                    
+            }
+        })
+    };
+
+    return new Promise((resolve, reject) => {
+        recursivePostFinder(url,posts => resolve(posts)); 
+    });
+}; 
 
 
 

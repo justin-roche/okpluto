@@ -95,8 +95,14 @@ module.exports = function(app) {
 			//gets facebook posts
 			 util.getUserAccessKeys(response.body.user_id)
 			 	.then((identities) => {
-					 util.getFaceBookPosts(identities[0].access_token);
+					 util.getFaceBookPosts(identities[0].access_token)
+					 	.then((posts) => {
+							console.log("============== ALL POST OBJECTS FROM FACEBOOK =================");
+							console.log(posts);
+							console.log("===============================================================");
+						});
 				 });
+				 
 				 
 			//Look for user in mongoDB;
 			User.findOne({
