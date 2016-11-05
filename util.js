@@ -2,7 +2,7 @@ const authPath = require('./config/auth0');
 const request = require('request');
 const User = require('./app/models/users');
 
-const getUserAccessKeys = function(userId) { 
+const getUserAccessKeys = function(userId) {
     let oAuthUrl = `https://${authPath.AUTH0_DOMAIN}/oauth/token`;
 
     return new Promise((resolve, reject) => {
@@ -15,7 +15,7 @@ const getUserAccessKeys = function(userId) {
                 "client_secret":"${authPath.AUTH0_CLIENT_SECRET}",
                 "audience":"https://${authPath.AUTH0_DOMAIN}/api/v2/",
                 "grant_type":"client_credentials"
-            }` 
+            }`
         },(error,response,body) => {
             if(error) {
                 console.log("oAuth error", error);
@@ -34,12 +34,12 @@ const getUserAccessKeys = function(userId) {
                 if(err){
                     console.log("error", err);
                     reject(err);
-                } 
+                }
                 let fbAccessKey = JSON.parse(response.body).identities[0].access_token;
                 resolve(JSON.parse(response.body).identities);
             });
         });
-    });	
+    });
 };
 
 const getFaceBookPosts = function(fbAccessKey) {
@@ -51,7 +51,7 @@ const getFaceBookPosts = function(fbAccessKey) {
         request.get(url, (err, responseObject) => {
             if(err){
                 console.log("error in recursive get", err);
-            } 
+            }
             responseObject = JSON.parse(responseObject.body);
 
             if(responseObject.data.length === 0) {
@@ -67,15 +67,15 @@ const getFaceBookPosts = function(fbAccessKey) {
                 console.log(`added posts from page ${page}`);
                 page++;
 
-                recursivePostFinder(responseObject.paging.next, cb);                    
+                recursivePostFinder(responseObject.paging.next, cb);
             }
         })
     };
 
     return new Promise((resolve, reject) => {
-        recursivePostFinder(url,posts => resolve(posts)); 
+        recursivePostFinder(url,posts => resolve(posts));
     });
-}; 
+};
 
 const puppyMatcher = function(userId, watsonData){
     let breedArray = [];
