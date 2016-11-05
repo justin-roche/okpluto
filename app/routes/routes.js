@@ -134,7 +134,7 @@ module.exports = function(app) {
 							});
 							console.log("===============================================================");
 						});
-					});
+				});
 			}
 
 			//Look for user in mongoDB;
