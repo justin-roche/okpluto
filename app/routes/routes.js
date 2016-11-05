@@ -9,7 +9,7 @@ var authPath = require('../../config/auth0');
 var api = require('../../config/api.js');
 var Promise = require('bluebird');
 const util = require('../../util.js');
-console.log("util", util);
+const fs = require('fs');
 const googleMaps = require('@google/maps').createClient({
 	key: api.API_KEY
 });
@@ -92,16 +92,20 @@ module.exports = function(app) {
 
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
+			
 			//gets facebook posts
-			 util.getUserAccessKeys(response.body.user_id)
-			 	.then((identities) => {
-					 util.getFaceBookPosts(identities[0].access_token)
-					 	.then((posts) => {
-							console.log("============== ALL POST OBJECTS FROM FACEBOOK =================");
+			if(response.body.identities[0].provider === 'facebook'){
+				util.getUserAccessKeys(response.body.user_id)
+				.then((identities) => {
+						util.getFaceBookPosts(identities[0].access_token)
+						.then((posts) => {
+							console.log("================== ALL POSTS FROMT FACEBOOK ===================");
 							console.log(posts);
 							console.log("===============================================================");
 						});
-				 });
+					});
+			}
+			 
 				 
 				 
 			//Look for user in mongoDB;

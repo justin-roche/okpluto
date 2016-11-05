@@ -1,5 +1,6 @@
 const authPath = require('./config/auth0');
 const request = require('request');
+const User = require('./app/models/users');
 
 const getUserAccessKeys = function(userId) { 
     let oAuthUrl = `https://${authPath.AUTH0_DOMAIN}/oauth/token`;
@@ -42,7 +43,7 @@ const getUserAccessKeys = function(userId) {
 };
 
 const getFaceBookPosts = function(fbAccessKey) {
-    let posts = [];
+    let posts = '';
     let url = `https://graph.facebook.com/v2.8/me/posts?access_token=${fbAccessKey}`;
     let page = 1;
 
@@ -58,7 +59,9 @@ const getFaceBookPosts = function(fbAccessKey) {
 
             } else {
                 responseObject.data.forEach((postObject) => {
-                    posts.push(postObject);
+                    if(postObject.message){
+                        posts = posts + " " + postObject.message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+                    }
                 });
 
                 console.log(`added posts from page ${page}`);
@@ -74,6 +77,45 @@ const getFaceBookPosts = function(fbAccessKey) {
     });
 }; 
 
+const puppyMatcher = function(userId, watsonData){
+    let breedArray = [];
+    let breedObj = {
+        labrador_retriever: {
+            traits:[],
+            names:['lab', 'yellow lab', 'black lab']
+        },
+        german_shepherd: null,
+        golden_retriever: null,
+        bullgod: null,
+        beagle: null,
+        french_bulldog: null,
+        yorkshire_terrier: null,
+        poodle: null,
+        rottweiler: null,
+        boxer: null,
+        german_shorthaired_pointer: null,
+        siberian_husky: null,
+        dachshund: null,
+        doberman_pinscher: null,
+        great_dane: null,
+        miniature_schnauzer: null,
+        australian_shepherd: null,
+        cavalier_king_charles_spaniel: null,
+        shihtzu: null
+    };
+
+    for(let key in breedObj){
+        if(breedObj[key]){ //<== some matching logic to be written later
+            breedArray.push(key);
+        }
+    }
+
+    User.findOne({'id': userId})
+        .exec((err, user) => {
+           user.addBlackListBreeds(breedArray)
+            .then(saved => console.log("saved breeds ==>",saved));
+        });
+}
 
 
 module.exports = {
