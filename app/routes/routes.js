@@ -9,6 +9,7 @@ var authPath = require('../../config/auth0');
 var api = require('../../config/api.js');
 var Promise = require('bluebird');
 const util = require('../../util.js');
+<<<<<<< 7448055c3979273591af60681911f1004678ba43
 <<<<<<< 5e2f01cbac85cfa5c426998bea9b5664e8e906a6
 const fs = require('fs');
 =======
@@ -16,6 +17,15 @@ const watson = require('../../watson.js');
 console.log("util", util);
 console.log('watson', watson);
 >>>>>>> added watson file / added watson to routes
+=======
+
+const fs = require('fs');
+
+const watson = require('../../watson.js');
+console.log("util", util);
+console.log('watson', watson);
+
+>>>>>>> resolved
 const googleMaps = require('@google/maps').createClient({
 	key: api.API_KEY
 });
@@ -126,7 +136,6 @@ module.exports = function(app) {
 						});
 					});
 			}
-
 
 			//Look for user in mongoDB;
 			User.findOne({
