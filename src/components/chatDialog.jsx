@@ -40,6 +40,7 @@ class ChatDialog extends React.Component {
   }
 
   handleSend(){
+    debugger;
     console.log('sending message');
   }
 
@@ -52,6 +53,7 @@ class ChatDialog extends React.Component {
   // }
 
   handleClose() {
+    console.log('handling close');
     this.setState({open: false});
   }
 
@@ -80,21 +82,16 @@ class ChatDialog extends React.Component {
 
   handleSubmit() {
     var self = this;
+    console.log('handling submit');
     //Validates the events form
-    let errors = this.validate(events);
-    let handleClose = this.handleClose;
+    //let errors = this.validate(events);
+    //let handleClose = this.handleClose;
     //If there's no errors found
-    if (Object.keys(errors).length === 0) {
+    //if (Object.keys(errors).length === 0) {
       //Save the event to the db
-      eventServices.saveEvent(this.state)
-        .then(function (data){
-          //Close the form popup
-          handleClose();
-          //And show the user confirmation that the event was created
-          self.setState({snackbar: true });
-        });
-    }
-    this.setState({"errorText": errors});
+      
+    //}
+    //this.setState({"errorText": errors});
   }
 
   handleChange(prop, newValue) {
@@ -106,12 +103,12 @@ class ChatDialog extends React.Component {
   render() {
     const actions = [
       <FlatButton
-        label="Send"
+        label="Close"
         primary={true}
-        onTouchTap={this.handleSend}
+        onTouchTap={this.handleClose}
       />,
       <FlatButton
-        label="Close"
+        label="Send"
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.handleSubmit}
@@ -141,6 +138,7 @@ class ChatDialog extends React.Component {
             autoDetectWindowHeight={true}
           >
             <div className="middle">
+<<<<<<< 2641eb2fa036beea5a6afb4cc7ecbf51dd307819
               <form name="chat">
                 <ChatCreation />
                 <RaisedButton
@@ -148,6 +146,9 @@ class ChatDialog extends React.Component {
                 label = "Send"
                 />
                 </form>
+=======
+              
+>>>>>>> send button does stuff
             </div>
           </Dialog>
           <Snackbar
