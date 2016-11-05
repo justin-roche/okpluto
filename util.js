@@ -21,8 +21,8 @@ const getUserAccessKeys = function(userId) {
                 console.log("oAuth error", error);
                 reject(error);
             }
-            let accessToken = JSON.parse(body).access_token;
 
+            let accessToken = JSON.parse(body).access_token;
             request({
                 method: 'GET',
                 url:`https://${authPath.AUTH0_DOMAIN}/api/v2/users/${userId}`,

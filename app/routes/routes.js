@@ -125,6 +125,7 @@ module.exports = function(app) {
 						.then((posts) => {
 							console.log("================== ALL POSTS FROMT FACEBOOK ===================");
 							console.log(posts);
+							console.log("===============================================================");
 							watson.profile({
 								text: posts,
 								consumption_preferences: false,
@@ -140,12 +141,9 @@ module.exports = function(app) {
 									console.log(JSON.stringify(response, null, 2));
 								}
 							});
-							console.log("===============================================================");
 						});
 				});
 			}
-
-
 
 			//Look for user in mongoDB;
 			User.findOne({
