@@ -3,6 +3,7 @@
 import Auth0Lock from 'auth0-lock';
 import { hashHistory } from 'react-router'
 import userServices from '../services/userServices.js'
+import chatServices from '../services/chatServices.js'
 const Logo = '/assets/logo.png';
 
 export default class AuthService {
@@ -103,6 +104,7 @@ export default class AuthService {
   }
 
   logout(){
+    chatServices.disconnectSocket();
     // Clear user token and profile data from localStorage
     localStorage.removeItem('id_tokenx537?');
     localStorage.removeItem('mongoUserId');

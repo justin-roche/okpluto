@@ -52,9 +52,16 @@ const listenForOnlineUser = function(callback){
   socket.on('onlineUsers', function(data){
     data = JSON.parse(data);
     console.log('new available users from socket', data);
-    data.users.forEach(function(user){
+    data.forEach(function(user){
       callback(user);
     });
+  });
+}
+
+const listenForOfflineUser = function(callback){
+  socket.on('offlineUser', function(data){
+    data = JSON.parse(data);
+    callback(data);
   });
 }
 
@@ -66,6 +73,10 @@ const listenForNewChat = function(callback){
   });
 }
 
+const disconnectSocket = function(){
+  socket.disconnect();
+}
+
 module.exports = {
   createSocket: createSocket,
   listenForNewChat: listenForNewChat,
@@ -73,4 +84,6 @@ module.exports = {
   listenForMessage: listenForMessage,
   sendMessage: sendMessage,
   requestChat: requestChat,
+  disconnectSocket: disconnectSocket,
+  listenForOfflineUser: listenForOfflineUser,
 }

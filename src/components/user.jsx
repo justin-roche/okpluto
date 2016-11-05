@@ -39,12 +39,20 @@ class UserDisplay extends React.Component {
     this.state = {
       chatDisabled: true
     }
+    
     var self = this;
     chatServices.listenForOnlineUser(function(dbId){
       if(dbId === self.props.user._id){
         self.setState({chatDisabled: false});
       }
     });
+
+    chatServices.listenForOfflineUser(function(dbId){
+      if(dbId === self.props.user._id){
+        self.setState({chatDisabled: true});
+      }
+    });
+
     this.displayMatch();    
 >>>>>>> socket deletion in server.js; disables chat for unavailable users on login
   }
