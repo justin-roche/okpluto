@@ -41,6 +41,7 @@ class UserDisplay extends React.Component {
       <div>
         <Card>
           <CardMedia>
+            <input type="checkbox" />
             <img src={this.props.user.picLink || this.props.user.profilepic} className="card-img" alt="Pic"/>
           </CardMedia>
 
