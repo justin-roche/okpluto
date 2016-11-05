@@ -8,6 +8,8 @@ var request = require('request');
 var authPath = require('../../config/auth0');
 var api = require('../../config/api.js');
 var Promise = require('bluebird');
+const util = require('../../util.js');
+console.log("util", util);
 const googleMaps = require('@google/maps').createClient({
 	key: api.API_KEY
 });
@@ -83,12 +85,26 @@ module.exports = function(app) {
 		console.log('hitting /signin');
 		//Auth0 user ID
 		var id = req.body.id;
+		
+
 		//POST path to retrieve user info from Auth0
 		var url = 'https://' + authPath.AUTH0_DOMAIN + '/tokeninfo';
 
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
-			//Look for user in mongoDB
+			//gets facebook posts
+			 util.getUserAccessKeys(response.body.user_id)
+			 	.then((identities) => {
+					 util.getFaceBookPosts(identities[0].access_token)
+					 	.then((posts) => {
+							console.log("============== ALL POST OBJECTS FROM FACEBOOK =================");
+							console.log(posts);
+							console.log("===============================================================");
+						});
+				 });
+				 
+				 
+			//Look for user in mongoDB;
 			User.findOne({
 				'id': response.body.user_id
 			}).exec((err, user) => {
@@ -121,6 +137,7 @@ module.exports = function(app) {
 				} else {
 					console.log('sending user');
 					user.creation = false;
+					
 					res.status(200).send({user: user, creation: false});
 				}
 			})
@@ -158,7 +175,7 @@ module.exports = function(app) {
 			res.status(201).send({events: events});
 		});
 	});
-
+//change
 	app.get('/queryEvents/dbId', (req, res) => {
 		Event.find({attendees: req.query.dbId})
 		.exec((err, attendingEvents) => {
