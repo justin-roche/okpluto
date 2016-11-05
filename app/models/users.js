@@ -20,8 +20,14 @@ var userSchema = mongoose.Schema({
   dogLikes: [String],
   dogBreed: String,
   dogAge: Number,
-  events: [String]
+  events: [String],
+  blackListBreeds: [String]
 });
+
+userSchema.methods.addBlackListBreeds = function(breedsArray){
+  this.blackListBreeds = breedsArray;
+  return this.save()
+}
 
 var User = mongoose.model('User', userSchema);
 
