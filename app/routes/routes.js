@@ -9,7 +9,31 @@ var authPath = require('../../config/auth0');
 var api = require('../../config/api.js');
 var Promise = require('bluebird');
 const util = require('../../util.js');
+<<<<<<< 2e59d3996d484ca164e1607d30c76d27776065d2
+<<<<<<< 7448055c3979273591af60681911f1004678ba43
+<<<<<<< 5e2f01cbac85cfa5c426998bea9b5664e8e906a6
 const fs = require('fs');
+=======
+const watson = require('../../watson.js');
+console.log("util", util);
+console.log('watson', watson);
+>>>>>>> added watson file / added watson to routes
+=======
+
+const fs = require('fs');
+=======
+
+const fs = require('fs');
+>>>>>>> added watson file / added watson to routes
+
+const watson = require('../../watson.js');
+console.log("util", util);
+console.log('watson', watson);
+
+<<<<<<< 2e59d3996d484ca164e1607d30c76d27776065d2
+>>>>>>> resolved
+=======
+>>>>>>> added watson file / added watson to routes
 const googleMaps = require('@google/maps').createClient({
 	key: api.API_KEY
 });
@@ -85,14 +109,14 @@ module.exports = function(app) {
 		console.log('hitting /signin');
 		//Auth0 user ID
 		var id = req.body.id;
-		
+
 
 		//POST path to retrieve user info from Auth0
 		var url = 'https://' + authPath.AUTH0_DOMAIN + '/tokeninfo';
 
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
-			
+
 			//gets facebook posts
 			if(response.body.identities[0].provider === 'facebook'){
 				util.getUserAccessKeys(response.body.user_id)
@@ -102,11 +126,25 @@ module.exports = function(app) {
 							console.log("================== ALL POSTS FROMT FACEBOOK ===================");
 							console.log(posts);
 							console.log("===============================================================");
+							watson.profile({
+								text: posts,
+								consumption_preferences: false,
+							  raw_scores: false,
+							  headers: {
+							    'accept-language': 'en',
+							    'accept': 'application/json'
+							  }
+							}, (error, res) => {
+								if (error) {
+									console.log(error);
+								} else {
+									console.log(JSON.stringify(response, null, 2));
+								}
+							});
 						});
-					});
+				});
 			}
-				 
-				 
+
 			//Look for user in mongoDB;
 			User.findOne({
 				'id': response.body.user_id
@@ -140,7 +178,7 @@ module.exports = function(app) {
 				} else {
 					console.log('sending user');
 					user.creation = false;
-					
+
 					res.status(200).send({user: user, creation: false});
 				}
 			})
