@@ -119,7 +119,7 @@ class MeetupDialog extends React.Component {
 
     const style3 = {
       height: '1000px',
-      width: '700px'
+      width: '1000px'
     };
 
 
