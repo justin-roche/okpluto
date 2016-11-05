@@ -134,6 +134,7 @@ class ChatDialog extends React.Component {
               hintText="Message"
               value = {this.state.inputMessage} 
               onChange = {this.handleInputMessage}
+              
             />,
       <FlatButton
         label="Close"
@@ -145,6 +146,7 @@ class ChatDialog extends React.Component {
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.handleSubmit}
+
       />
     ];
 
@@ -162,7 +164,7 @@ class ChatDialog extends React.Component {
           />
 
           <Dialog
-            title="Chat Area"
+            title="Chat"
             titleStyle={{textAlign: 'center'}}
             actions={actions}
             modal={true}
@@ -176,12 +178,16 @@ class ChatDialog extends React.Component {
               {this.state.messages.map(function(message){
                 if(message.self){
                   return (
-                    <p>{message.text}</p>
+                    <div style={{textAlign: "right"}}>
+                      <p>{message.text}</p>
+                    </div>
                   )
                 }
                 else {
                   return (
-                    <p style={{color:"red"}}>{message.text}</p>
+                    <div style={{textAlign: "left"}}>
+                      <p style={{color:"red"}}>{message.text}</p>
+                    </div>
                   )
                 }
               })}
