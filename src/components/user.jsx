@@ -2,7 +2,7 @@
 
 import React from 'react';
 import DialogButton from './dialogButton.jsx';
-import ChatCreation from './chatCreation.jsx';
+import ChatButton from './chatButton.jsx';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
@@ -46,6 +46,16 @@ class UserDisplay extends React.Component {
               resetUserInfo={this.props.resetUserInfo}
               toggleDrawer={this.props.toggleDrawer}
             />
+            <ChatButton
+              userId={this.props.user._id}
+              lat={this.props.user.lat}
+              lng={this.props.user.lng}
+              type={this.props.type}
+              userInfo={this.props.userInfo}
+              resetUserInfo={this.props.resetUserInfo}
+              toggleDrawer={this.props.toggleDrawer}
+            />
+            
           </CardActions>
         </Card>
       </div>
@@ -53,5 +63,8 @@ class UserDisplay extends React.Component {
   }
 
 }
-
+// <ChatButton
+//               userId={this.props.user._id}
+//               toggleDrawer={this.props.toggleDrawer}
+//             />
 module.exports = UserDisplay;
