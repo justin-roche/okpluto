@@ -56,7 +56,7 @@ module.exports = function(grunt) {
       }
     },
 
-// Opens a new browser window each time nodemon starts up
+    // Opens a new browser window each time nodemon starts up
     // nodemon: {
     //   dev: {
     //     script: 'server.js',
@@ -66,7 +66,6 @@ module.exports = function(grunt) {
     //         nodemon.on('log', function (event) {
     //           console.log(event.colour);
     //         });
-
     //         nodemon.on('config:update', function () {
     //         // Delay before server listens on port
     //         setTimeout(function() {
@@ -86,8 +85,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-shell-spawn');
 
-// Running grunt will open mongo connection, create bundle.js,
-// open a browser window with the site and watch for changes
+  // Running grunt will open mongo connection, create bundle.js,
+  // open a browser window with the site and watch for changes
   grunt.registerTask('default', ['build']);
   grunt.registerTask('kill', ['shell:mongo:kill'])
   grunt.registerTask('build', ['browserify']);

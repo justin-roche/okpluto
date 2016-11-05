@@ -6,10 +6,10 @@ var UserDisplay = require('./user.jsx')
 import Loading from './loading.jsx'
 
 // Row component for each rows
-const Row = (props) => (
+const Row = props => (
   <div className="row">
     {
-      props.row.map((user) => (
+      props.row.map(user => (
         <div className= "col-md-3">
           <UserDisplay user={user} userInfo={props.userInfo} resetUserInfo={props.resetUserInfo} type='user' />
         </div>
