@@ -21,11 +21,19 @@ const createSocket = function() {
 
 }
 
-const requestChat = function(targetId){
-  var dbId = localStorage.getItem('mongoUserId');
+const sendMessage = function(attendees,message){
+  console.log('sending message');
+  socket.emit('message',{
+    sender: attendees[0],
+    receiver: attendees[1],
+    message: message,
+  });
+}
+const requestChat = function(attendees){
+  console.log('requesting chat');
   socket.emit('requestChat',{
-    sender: dbId,
-    receiver: targetId,
+    sender: attendees[0],
+    receiver: attendees[1],
   });
 }
 
@@ -33,14 +41,14 @@ const requestChat = function(targetId){
 //in a callback registered here to trigger on socket events
 
 //this sends messages to chat dialog component
-const registerMessageDisplay = function(callback){
+const listenForMessage = function(callback){
   socket.on('message', function(data){
     callback(data);
   });
 }
 
 //this sends user ids to the card components that display if users are online
-const registerAvailableDisplay = function(callback){
+const listenForOnlineUser = function(callback){
   socket.on('onlineUsers', function(data){
     console.log('new available user from socket', data);
     data.users.forEach(function(user){
@@ -50,16 +58,18 @@ const registerAvailableDisplay = function(callback){
 }
 
 //
-const registerChatOpen = function(callback){
+const listenForNewChat = function(callback){
   socket.on('requestChat', function(data){
-    console.log('chat requested',data);
+    console.log('chat requested from:',data);
     callback(data);
   });
 }
 
 module.exports = {
   createSocket: createSocket,
-  registerChatOpen: registerChatOpen,
-  registerAvailableDisplay: registerAvailableDisplay,
+  listenForNewChat: listenForNewChat,
+  listenForOnlineUser: listenForOnlineUser,
+  listenForMessage: listenForMessage,
+  sendMessage: sendMessage,
   requestChat: requestChat,
 }
