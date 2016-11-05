@@ -94,6 +94,7 @@ module.exports = function(app) {
 			if (err) console.log(err)
 			
 			//gets facebook posts
+<<<<<<< 45bff8cee54e7bbebd862ab0517f303db0b728f9
 			if(response.body.identities[0].provider === 'facebook'){
 				util.getUserAccessKeys(response.body.user_id)
 				.then((identities) => {
@@ -105,7 +106,6 @@ module.exports = function(app) {
 						});
 					});
 			}
-			 
 				 
 				 
 			//Look for user in mongoDB;
