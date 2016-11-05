@@ -53,5 +53,3 @@ ReactDOM.render(
     </Route>
   </Router>, $('#app')[0]
 );
-
-

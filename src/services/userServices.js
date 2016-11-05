@@ -30,7 +30,6 @@ const updateDb = function(newProps) {
 
 // Add latitude and longitude values then make ajax call to update user info
 const updateUser = function(newProps) {
-  console.log('updating user in updateUser');
   newProps.dbId = localStorage.getItem('mongoUserId');
   return new Promise((resolve, reject) => {
     if (newProps.loc) {
@@ -102,7 +101,43 @@ const deleteUser = function(dbId) {
       error: reject
     })
   })
-}
+};
+
+// like / unlike other users
+const likeUser = (dbId, friendId, like) => {
+  return new Promise((resolve, reject) => {
+    console.log('likeUser called', dbId, friendId, like);
+    dbId = dbId || localStorage.getItem('mongoUserId');
+
+    var checkExistingLikes = user => {
+      return new Promise((resolve, reject) => {
+        console.log('checkExistingLikes called with user object', user);
+        var data = {};
+        data.dbId = dbId;
+        data.dogLikes = user.dogLikes.map(item => { return item; });
+        // if (like === true && user.dogLikes.reduce(friend => { return friend == friendId; }, false) === false) {
+        if (like === true) {
+          data.dogLikes.push(user);
+          console.log('like doggy fired', data);
+          resolve(data);
+        }
+        // else if (like === false && user.dogLikes.reduce(friend => { return friend == friendId; }, false) === true) {
+        else if (like === false) {
+          data.dogLikes = data.dogLikes.filter(item => { return item != user; });
+          console.log('don\'t like doggy fired', data);
+          resolve(data);
+        } else {
+          reject('error checking existing users');
+        }
+      });
+    };
+
+    findUser(dbId)
+      .then(checkExistingLikes)
+      .then(updateDb)
+      .then(resolve);
+  });
+};
 
 module.exports = {
   getLatLng: getLatLng,
@@ -111,5 +146,6 @@ module.exports = {
   saveUser: saveUser,
   findUser: findUser,
   updateUser: updateUser,
-  deleteUser: deleteUser
-}
+  deleteUser: deleteUser,
+  likeUser: likeUser
+};

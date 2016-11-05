@@ -6,6 +6,7 @@ import ChatButton from './chatButton.jsx';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
+import userServices from '../services/userServices.js';
 
 class UserDisplay extends React.Component {
   // constructor(props){
@@ -35,12 +36,25 @@ class UserDisplay extends React.Component {
     return;
   }
 
+  constructor(props) {
+    super(props);
+    // this.state = {isLiked: this.props.isLiked};
+    this.state = {isLiked: false};
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({isLiked: event.target.value});
+    userServices.likeUser(this.props.userInfo._id, this.props.user._id, this.state.isLiked);
+  }
+
   render () {
     console.log("user info from user card", this.props.userInfo);
     return (
       <div>
         <Card>
           <CardMedia>
+            <input type="checkbox" checked={this.state.isLiked} onChange={this.handleChange} />
             <img src={this.props.user.picLink || this.props.user.profilepic} className="card-img" alt="Pic"/>
           </CardMedia>
 
