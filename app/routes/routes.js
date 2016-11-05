@@ -90,7 +90,47 @@ module.exports = function(app) {
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
 			//Look for user in mongoDB
-			//console.log("auth0 uers data", response.body);
+			//console.log("user id", response.body.user_id);
+
+			let oAuthUrl = `https://${authPath.AUTH0_DOMAIN}/oauth/token`;
+			let userId = response.body.user_id;
+		
+			request({
+				method: 'POST',
+				url: oAuthUrl,
+				headers: { 'content-type': 'application/json' },
+				body: `{
+					"client_id":"${authPath.AUTH0_CLIENT_ID}",
+					"client_secret":"${authPath.AUTH0_CLIENT_SECRET}",
+					"audience":"https://${authPath.AUTH0_DOMAIN}/api/v2/",
+					"grant_type":"client_credentials"
+				}` 
+			},(error,response,body) => {
+				if(error) console.log("oAuth error", error);
+				let accessToken = JSON.parse(body).access_token;
+
+				request({
+					method: 'GET',
+					url:`https://${authPath.AUTH0_DOMAIN}/api/v2/users/${userId}`,
+					headers: {
+						'content-type': 'application/json',
+						'Authorization': 'Bearer ' + accessToken
+					}
+				}, (err, response) => {
+					if(err) console.log("error", err);
+					let fbAccessKey = JSON.parse(response.body).identities[0].access_token;
+
+					request({
+						method: 'GET',
+						url: 'https://graph.facebook.com/v2.8/me/posts?access_token=' + fbAccessKey,
+					}, (err,response,body) => {
+						console.log("posts from facebook api ====>", body);
+					});
+					
+				});
+
+				
+			});
 			
 			User.findOne({
 				'id': response.body.user_id
