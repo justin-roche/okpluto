@@ -172,6 +172,10 @@ class MeetupCreation extends React.Component {
       height: '250px',
       width: '400px'
     }
+    const styles2 = {
+      height: '1000px',
+      width: '700px'
+    }
 
     //Note: All text fields have a name and an errorText that is needed for validation (validate function can be found within parent component, MeetupDialog)
     return (

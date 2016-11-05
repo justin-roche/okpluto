@@ -117,6 +117,11 @@ class MeetupDialog extends React.Component {
       />
     ];
 
+    const style3 = {
+      height: '1000px',
+      width: '700px'
+    };
+
 
 
     //autoScrollBodyContent within Dialog is super important when you're wondering why all of your form fields are not showing up
@@ -132,6 +137,7 @@ class MeetupDialog extends React.Component {
           <Dialog
             title="Meetup Creation"
             titleStyle={{textAlign: 'center'}}
+            style={style3}
             actions={actions}
             modal={true}
             open={this.state.open}
