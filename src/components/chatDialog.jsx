@@ -20,6 +20,7 @@ import chatServices from '../services/chatServices.js';
 
 class ChatDialog extends React.Component {
   constructor(props) {
+    console.log('chatDialog props',props);
     super(props);
     this.state = {
       open: false,
@@ -154,6 +155,7 @@ class ChatDialog extends React.Component {
       <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
         <div>
           <RaisedButton
+            disabled={this.props.chatDisabled}
             onTouchTap={this.handleOpen}
             label="Let's Chat!"
             primary={true}

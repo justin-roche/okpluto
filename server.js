@@ -63,7 +63,7 @@ io.on('connection', function(client) {
     var onlineUsers = Object.keys(usersTable).map(function(dbId){
       return dbId; 
     });
-    io.to(socketId).emit('usersOnline', JSON.stringify({users: onlineUsers}));
+    io.to(socketId).emit('onlineUsers', JSON.stringify({users: onlineUsers}));
 
     client.on('onlineUser',function(data){
       //extract sender id and save id prop to usersTable
@@ -83,6 +83,15 @@ io.on('connection', function(client) {
       console.log('sending message',data);
       console.log('reciever socketid', usersTable[data.receiver]);
       io.to(usersTable[data.receiver]).emit('message',JSON.stringify(data.message));
+    });
+
+    client.on('disconnect',function(data){
+      Object.keys(usersTable).forEach(function(dbId){
+        if(usersTable[dbId] === socketId){
+          delete usersTable[dbId];
+          console.log('deleted from usersTable',dbId);
+        }
+      })
     });
 
 });

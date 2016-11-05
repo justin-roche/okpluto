@@ -50,7 +50,8 @@ const listenForMessage = function(callback){
 //this sends user ids to the card components that display if users are online
 const listenForOnlineUser = function(callback){
   socket.on('onlineUsers', function(data){
-    console.log('new available user from socket', data);
+    data = JSON.parse(data);
+    console.log('new available users from socket', data);
     data.users.forEach(function(user){
       callback(user);
     });

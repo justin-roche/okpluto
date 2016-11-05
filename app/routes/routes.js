@@ -92,6 +92,7 @@ module.exports = function(app) {
 			if (err) console.log(err)
 
 			//gets facebook posts
+
 			if(response.body.identities[0].provider === 'facebook'){
 				util.getUserAccessKeys(response.body.user_id)
 				.then((identities) => {
