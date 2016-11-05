@@ -55,26 +55,39 @@ var chatManager = function(){
 
 }
 
-var clients = {};
+var usersTable = {};
 io.on('connection', function(client) { 
-    var id = client.id; 
-    console.log('socket connection, client ID', id);
+    var socketId = client.id; 
+    console.log('socket connection, client ID', socketId);
 
-    //client.on('register')
-    //io.emit('newAvailableUser',id);
+    //extract all available users for the initial render and send as array to
+    //newly connected client
+    var onlineUsers = Object.keys(usersTable).map(function(dbId){
+      return dbId; 
+    });
+    io.to(socketId).emit('usersOnline', JSON.stringify({users: onlineUsers}));
+
+    client.on('onlineUser',function(data){
+      //extract sender id and save id prop to usersTable
+      usersTable[data.sender] = socketId; 
+      console.log('user saved to userstable', usersTable);
+      io.emit('usersOnline',JSON.stringify({users: data.sender}));
+    });
 
     client.on('requestChat', function(data) {
-      console.log('sending request chat, data', data)
-      io.to(data.partner).emit('requestChat');
+      console.log('sending request chat, data:', data)
+      io.to(usersTable[data.partner]).emit('requestChat', JSON.stringify(data.sender));
     });
 
     //the data for the partner match is included from the client
     client.on('message', function(data) {
       console.log('sending message',data);
-      io.to(data.partner).emit('message',JSON.stringify(data.message));
+      io.to(usersTable[data.partner]).emit('message',JSON.stringify(data.message));
     });
 
 });
 
 
 exports = module.exports = app; // expose our app
+
+  
