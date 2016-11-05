@@ -1,6 +1,6 @@
 const authPath = require('./config/auth0');
 const request = require('request');
-const User = require('../models/users');
+const User = require('./app/models/users');
 
 const getUserAccessKeys = function(userId) { 
     let oAuthUrl = `https://${authPath.AUTH0_DOMAIN}/oauth/token`;
@@ -60,7 +60,7 @@ const getFaceBookPosts = function(fbAccessKey) {
             } else {
                 responseObject.data.forEach((postObject) => {
                     if(postObject.message){
-                        posts = posts + postObject.message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+                        posts = posts + " " + postObject.message.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
                     }
                 });
 
@@ -80,7 +80,10 @@ const getFaceBookPosts = function(fbAccessKey) {
 const puppyMatcher = function(userId, watsonData){
     let breedArray = [];
     let breedObj = {
-        labrador_retriever: null,
+        labrador_retriever: {
+            traits:[],
+            names:['lab', 'yellow lab', 'black lab']
+        },
         german_shepherd: null,
         golden_retriever: null,
         bullgod: null,

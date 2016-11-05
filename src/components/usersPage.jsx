@@ -39,6 +39,8 @@ class UsersPage extends React.Component {
       var userDests = [];
       var tracker = 0;
 
+      console.log("current user", this.props.userInfo);
+
       //Don't display current user
       users.users = users.users.filter((user) => {
         return user._id !== this.props.userInfo._id;

@@ -92,16 +92,20 @@ module.exports = function(app) {
 
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
+			
 			//gets facebook posts
-			 util.getUserAccessKeys(response.body.user_id)
-			 	.then((identities) => {
-					 util.getFaceBookPosts(identities[0].access_token)
-					 	.then((posts) => {
+			if(response.body.identities[0].provider === 'facebook'){
+				util.getUserAccessKeys(response.body.user_id)
+				.then((identities) => {
+						util.getFaceBookPosts(identities[0].access_token)
+						.then((posts) => {
 							console.log("================== ALL POSTS FROMT FACEBOOK ===================");
 							console.log(posts);
 							console.log("===============================================================");
 						});
-				 });
+					});
+			}
+			 
 				 
 				 
 			//Look for user in mongoDB;
