@@ -8,6 +8,15 @@ import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
 
 class UserDisplay extends React.Component {
+  // constructor(props){
+  //   super(props);
+  // }
+
+  // getInitialState() {
+  //       return {
+  //           chatDisabled: true
+  //       };
+  //   }
 
   constructor(props) {
     super(props);
