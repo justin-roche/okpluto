@@ -132,7 +132,7 @@ class MeetupDialog extends React.Component {
             onTouchTap={this.handleOpen}
             label="Let's Meetup!"
             primary={true}
-          />
+          /><br/>
 
           <Dialog
             title="Meetup Creation"

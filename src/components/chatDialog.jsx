@@ -1,7 +1,3 @@
-/*
-  This file contains the MeetupDialog component! This all starts at the "Let's Meetup!" button found on the Users page. This renders the button, the dialog that pops over the screen, and fills it with the MeetupCreation component. It also contains a lot of the functionality that will be passed to MeetupCreation such as the validate function.
-*/
-
 "use strict";
 
 import React from 'react';
@@ -14,7 +10,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import MeetupCreation from './meetupCreation.jsx';
-// import ChatCreation from './chatCreation.jsx';
+import ChatCreation from './chatCreation.jsx';
 import Snackbar from 'material-ui/Snackbar';
 import * as Colors from 'material-ui/styles/colors';
 //Services
@@ -115,7 +111,7 @@ class ChatDialog extends React.Component {
         onTouchTap={this.handleSend}
       />,
       <FlatButton
-        label="Create Event"
+        label="Close"
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.handleSubmit}
@@ -135,7 +131,7 @@ class ChatDialog extends React.Component {
           />
 
           <Dialog
-            title="Chat"
+            title="Chat Area"
             titleStyle={{textAlign: 'center'}}
             actions={actions}
             modal={true}
@@ -145,10 +141,13 @@ class ChatDialog extends React.Component {
             autoDetectWindowHeight={true}
           >
             <div className="middle">
-              <RaisedButton 
+              <form name="chat">
+                <ChatCreation />
+                <RaisedButton
                 onTouchTap = {console.log('sent')}
                 label = "Send"
-              />
+                />
+                </form>
             </div>
           </Dialog>
           <Snackbar
