@@ -49,12 +49,6 @@ httpServer.listen(port, function() {
 	console.log('server running! :)');
 })
 
-var chatManager = function(){
-
-  
-
-}
-
 var usersTable = {};
 io.on('connection', function(client) { 
     var socketId = client.id; 
@@ -76,13 +70,15 @@ io.on('connection', function(client) {
 
     client.on('requestChat', function(data) {
       console.log('sending request chat, data:', data)
-      io.to(usersTable[data.partner]).emit('requestChat', JSON.stringify(data.sender));
+      console.log('target socketId is', usersTable[data.receiver]);
+      io.to(usersTable[data.receiver]).emit('requestChat', JSON.stringify(data.sender));
     });
 
     //the data for the partner match is included from the client
     client.on('message', function(data) {
       console.log('sending message',data);
-      io.to(usersTable[data.partner]).emit('message',JSON.stringify(data.message));
+      console.log('reciever socketid', usersTable[data.receiver]);
+      io.to(usersTable[data.receiver]).emit('message',JSON.stringify(data.message));
     });
 
 });

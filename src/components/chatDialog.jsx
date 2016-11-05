@@ -27,7 +27,9 @@ class ChatDialog extends React.Component {
       //Target user and creator automatically added to attendees
       attendees: [this.props.userInfo._id, this.props.userId],
       category: 'Dog Park',
-      snackbar: false
+      snackbar: false,
+      messages: ['a','b'],
+      testmessages: ['b','c']
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -37,6 +39,13 @@ class ChatDialog extends React.Component {
     this.validate = this.validate.bind(this);
     this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
     this.handleSend = this.handleSend.bind(this);
+    chatServices.listenForNewChat(this.handleReceivedChat.bind(this));
+
+    var self = this;
+    chatServices.listenForMessage(function(data){
+      console.log('message pushed to state',data);
+      self.setState({messages: self.state.messages.concat([data])});
+    })
   }
 
   handleSend(){
@@ -44,6 +53,13 @@ class ChatDialog extends React.Component {
   }
 
   handleOpen() {
+    chatServices.requestChat(this.state.attendees);
+    this.setState({open: true});
+  }
+
+  handleReceivedChat() {
+    console.log('chat request received, opening dialog');
+    //chatServices.requestChat(this.state.attendees);
     this.setState({open: true});
   }
 
@@ -80,21 +96,18 @@ class ChatDialog extends React.Component {
 
   handleSubmit() {
     var self = this;
-    //Validates the events form
-    let errors = this.validate(events);
-    let handleClose = this.handleClose;
-    //If there's no errors found
-    if (Object.keys(errors).length === 0) {
-      //Save the event to the db
-      eventServices.saveEvent(this.state)
-        .then(function (data){
-          //Close the form popup
-          handleClose();
-          //And show the user confirmation that the event was created
-          self.setState({snackbar: true });
-        });
-    }
-    this.setState({"errorText": errors});
+    var sender = this.state.attendees[0];
+    var receiver = this.state.attendees[1];
+    var message = 'message from' + sender;
+
+    //update this components messages to add my message
+    self.setState({messages: self.state.messages.concat([message])});
+
+    console.log('handling submit');
+    console.log('attendees', this.state.attendees);
+
+    //send message to receiver
+    chatServices.sendMessage(this.state.attendees, message);
   }
 
   handleChange(prop, newValue) {
@@ -106,12 +119,12 @@ class ChatDialog extends React.Component {
   render() {
     const actions = [
       <FlatButton
-        label="Send"
+        label="Close"
         primary={true}
-        onTouchTap={this.handleSend}
+        onTouchTap={this.handleClose}
       />,
       <FlatButton
-        label="Close"
+        label="Send"
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.handleSubmit}
@@ -141,13 +154,12 @@ class ChatDialog extends React.Component {
             autoDetectWindowHeight={true}
           >
             <div className="middle">
-              <form name="chat">
-                <ChatCreation />
-                <RaisedButton
-                onTouchTap = {console.log('sent')}
-                label = "Send"
-                />
-                </form>
+
+              {this.state.messages.map(function(message){
+                return (
+                  <p>{message}</p>
+                )
+              })}
             </div>
           </Dialog>
           <Snackbar
