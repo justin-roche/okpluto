@@ -9,7 +9,25 @@ import Avatar from 'material-ui/Avatar';
 
 class UserDisplay extends React.Component {
 
+  constructor(props) {
+    super(props);
+    
+    this.displayMatch();    
+  }
+
+  displayMatch(){
+    if(this.props.userInfo.blackListBreeds.indexOf(this.props.user.dogBreed) === -1){
+      console.log(`good breed match from ${this.props.user.dogname}`);
+      //display a badmatch image
+      return;
+    }
+    //display a good match image
+    console.log(`bad breed match from ${this.props.user.dogname}`);
+    return;
+  }
+
   render () {
+    console.log("user info from user card", this.props.userInfo);
     return (
       <div>
         <Card>

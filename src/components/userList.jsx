@@ -22,6 +22,7 @@ class UserList extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log("current user from user list", this.props.userInfo);
   }
 
   render() {
