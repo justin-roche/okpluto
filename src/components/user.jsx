@@ -37,19 +37,22 @@ class UserDisplay extends React.Component {
     return false;
 =======
     this.state = {
-      chatDisabled: true
+      chatDisabled: true,
+      chatLabel: "offline",
     }
 
     var self = this;
     chatServices.listenForOnlineUser(function(dbId){
       if(dbId === self.props.user._id){
         self.setState({chatDisabled: false});
+        self.setState({chatLabel: "Let's chat!"});
       }
     });
 
     chatServices.listenForOfflineUser(function(dbId){
       if(dbId === self.props.user._id){
         self.setState({chatDisabled: true});
+        self.setState({chatLabel: "offline"});
       }
     });
 
@@ -126,7 +129,7 @@ class UserDisplay extends React.Component {
             />
             <ChatButton
               chatDisabled={this.state.chatDisabled}
-              style={{marginTop: "20px"}}
+              chatLabel={this.state.chatLabel}
               userId={this.props.user._id}
               lat={this.props.user.lat}
               lng={this.props.user.lng}

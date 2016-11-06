@@ -13,7 +13,7 @@ class ChatButton extends React.Component {
 
   render() {
     return (
-      <ChatDialog chatDisabled={this.props.chatDisabled} userId={this.props.userId} lat={this.props.lat} lng={this.props.lng} userInfo={this.props.userInfo} resetUserInfo={this.props.resetUserInfo}
+      <ChatDialog chatLabel={this.props.chatLabel} chatDisabled={this.props.chatDisabled} userId={this.props.userId} lat={this.props.lat} lng={this.props.lng} userInfo={this.props.userInfo} resetUserInfo={this.props.resetUserInfo}
       />
     )
   }

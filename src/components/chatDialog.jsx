@@ -41,6 +41,7 @@ class ChatDialog extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validate = this.validate.bind(this);
     this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
+
     chatServices.listenForNewChat(this.handleReceivedChat.bind(this));
 
     var self = this;
@@ -147,7 +148,7 @@ class ChatDialog extends React.Component {
             style={{marginTop: "10px"}}
             disabled={this.props.chatDisabled}
             onTouchTap={this.handleOpen}
-            label="Let's Chat!"
+            label={this.props.chatLabel}
             primary={true}
           />
 
