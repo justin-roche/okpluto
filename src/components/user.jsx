@@ -21,19 +21,39 @@ class UserDisplay extends React.Component {
 
   constructor(props) {
     super(props);
-    
-    this.displayMatch();    
+       
+  }
+
+  formatBreedName(breed){
+    return breed.split(" ")
+      .map((word) => {
+        return word.toLowerCase();
+      }).join(" ");
+  }
+
+  analyzeBreeds(breed){
+    let blackList = this.props.userInfo.blackListBreeds;
+
+    if(blackList.indexOf(this.formatBreedName(breed)) === -1){
+      return true;
+    }
+
+    return false;
   }
 
   displayMatch(){
-    if(this.props.userInfo.blackListBreeds.indexOf(this.props.user.dogBreed) === -1){
+    if(this.analyzeBreeds(this.props.user.dogBreed)){
       console.log(`good breed match from ${this.props.user.dogname}`);
       //display a badmatch image
-      return;
+      return(
+        <img src={'https://s-media-cache-ak0.pinimg.com/236x/53/f1/c4/53f1c40a18b3b16e81d15fb06d6a980e.jpg'} />
+      )
     }
     //display a good match image
     console.log(`bad breed match from ${this.props.user.dogname}`);
-    return;
+    return(
+      <img src={'https://s3.amazonaws.com/kandipatternspatterns/characters/20542_courage-the-cowardly-dog-i-have-a-bad-feeling-about-this-.png'} />
+    )
   }
 
   constructor(props) {
@@ -58,6 +78,7 @@ class UserDisplay extends React.Component {
             <img src={this.props.user.picLink || this.props.user.profilepic} className="card-img" alt="Pic"/>
           </CardMedia>
 
+          {this.displayMatch()}
           <CardHeader
             title={this.props.user.dogname}
             subtitle={'From: ' + this.props.user.loc}
