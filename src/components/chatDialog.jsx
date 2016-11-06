@@ -30,7 +30,7 @@ class ChatDialog extends React.Component {
       attendees: [this.props.userInfo._id, this.props.userId],
       category: 'Dog Park',
       snackbar: false,
-      messages: [{text: 'a'}],
+      messages: [],
       inputMessage: ""
     };
     this.handleChange = this.handleChange.bind(this);
