@@ -9,7 +9,6 @@ var authPath = require('../../config/auth0');
 var api = require('../../config/api.js');
 var Promise = require('bluebird');
 const util = require('../../util.js');
-const watson = require('../../watson.js');
 const googleMaps = require('@google/maps').createClient({
 	key: api.API_KEY
 });
