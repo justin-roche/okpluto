@@ -59,17 +59,16 @@ class UserDisplay extends React.Component {
 
 
   displayMatch(){
+    //user has not connected with facebook => has no recomended breeds
     if(this.props.userInfo.blackListBreeds.length === 0) return;
 
     if(this.analyzeBreeds(this.props.user.dogBreed)){
-      console.log(`good breed match from ${this.props.user.dogname}`);
       //display a badmatch image
       return(
         <img src={'http://i.imgur.com/2p5IkLM.jpg'} />
       )
     }
     //display a good match image
-    console.log(`bad breed match from ${this.props.user.dogname}`);
     return(
       <img src={'https://s3.amazonaws.com/kandipatternspatterns/characters/20542_courage-the-cowardly-dog-i-have-a-bad-feeling-about-this-.png'} />
     )
