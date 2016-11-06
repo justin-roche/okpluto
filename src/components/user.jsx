@@ -39,7 +39,8 @@ class UserDisplay extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  formatBreedName(breed) {
+
+  formatBreedName(breed){
     return breed.split(" ")
       .map((word) => {
         return word.toLowerCase();
@@ -56,18 +57,15 @@ class UserDisplay extends React.Component {
     return false;
   }
 
-  // getInitialState() {
-  //       return {
-  //           chatDisabled: true
-  //       };
-  //   }
 
-  displayMatch() {
+  displayMatch(){
+    if(this.props.userInfo.blackListBreeds.length === 0) return;
+
     if(this.analyzeBreeds(this.props.user.dogBreed)){
       console.log(`good breed match from ${this.props.user.dogname}`);
       //display a badmatch image
       return(
-        <img src={'https://s-media-cache-ak0.pinimg.com/236x/53/f1/c4/53f1c40a18b3b16e81d15fb06d6a980e.jpg'} />
+        <img src={'http://i.imgur.com/2p5IkLM.jpg'} />
       )
     }
     //display a good match image

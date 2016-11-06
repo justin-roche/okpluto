@@ -90,58 +90,70 @@ const watsonAnalyze = function (posts) {
         }
     };
 
-    personality_insights.profile(params, (error, response) => {
-        if (error) {
-            console.log('ERROR: ', error);
-        } else {
-            console.log(JSON.stringify(response, null, 2));
-        }
+    return new Promise ((resolve, reject) => {
+        personality_insights.profile(params, (error, response) => {
+            if (error) {
+                console.log('ERROR: ', error);
+                reject(error);
+            } else {
+                console.log(JSON.stringify(response, null, 2));
+                resolve(response);
+            }
+        });
     });
+};
+
+const breedPersonalityMatch = function(breedTrait, watsonData){
+    let userTrait = watsonData.personality.filter(traitObj => {
+        return traitObj.name.toLowerCase() === breedTrait;
+    })[0];
+
+    if (userTrait) {
+        return userTrait.percentile > 0.7;
+    } else {
+        return false;
+    }
+    
 }
 
-const puppyMatcher = function(userId, watsonData){
+const puppyMatcher = function(userId, watsonData, breedObj){
     let breedArray = [];
-    let breedObj = {
-        labrador_retriever: {
-            traits:[],
-            names:['lab', 'yellow lab', 'black lab']
-        },
-        german_shepherd: null,
-        golden_retriever: null,
-        bullgod: null,
-        beagle: null,
-        french_bulldog: null,
-        yorkshire_terrier: null,
-        poodle: null,
-        rottweiler: null,
-        boxer: null,
-        german_shorthaired_pointer: null,
-        siberian_husky: null,
-        dachshund: null,
-        doberman_pinscher: null,
-        great_dane: null,
-        miniature_schnauzer: null,
-        australian_shepherd: null,
-        cavalier_king_charles_spaniel: null,
-        shihtzu: null
-    };
 
     for(let key in breedObj){
-        if(breedObj[key]){ //<== some matching logic to be written later
-            breedArray.push(key);
-        }
+        let breed = breedObj[key];
+        let matchedTraits = 0;
+
+        breed.traits.forEach(breedTrait => {
+            if(breedPersonalityMatch(breedTrait, watsonData)){
+                matchedTraits++;
+            }
+        });
+
+        if(matchedTraits / breed.traits.length < 0.5){
+            breedArray = breedArray.concat(breed.names);
+        } 
     }
 
-    User.findOne({'id': userId})
-        .exec((err, user) => {
-           user.addBlackListBreeds(breedArray)
-            .then(saved => console.log("saved breeds ==>",saved));
-        });
-}
 
+   return new Promise((resolve, reject) => {
+        User.findOne({'id': userId})
+            .exec((err, user) => {
+                if(err) reject(err);
 
-module.exports = {
-    getUserAccessKeys: getUserAccessKeys,
-    getFaceBookPosts: getFaceBookPosts,
-    watsonAnalyze: watsonAnalyze
+                user.addBlackListBreeds(breedArray)
+                .then(resolve);
+            });
+   }); 
+   
 };
+
+const addBlackListBreeds = function(userId, breedObj){
+    getUserAccessKeys(userId)
+        .then((identities) => getFaceBookPosts(identities[0].access_token))
+        .then(watsonAnalyze)
+        .then(watsonData => puppyMatcher(userId, watsonData, breedObj))
+        .then(savedUserObj => console.log("saved", savedUserObj));
+};
+
+
+module.exports = addBlackListBreeds; 
