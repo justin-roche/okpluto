@@ -6,21 +6,17 @@ import ChatButton from './chatButton.jsx';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
+<<<<<<< 7567a2c403821cab561eb9c307a93ec01498619e
 import userServices from '../services/userServices.js';
+=======
+import chatServices from '../services/chatServices.js';
+>>>>>>> socket deletion in server.js; disables chat for unavailable users on login
 
 class UserDisplay extends React.Component {
-  // constructor(props){
-  //   super(props);
-  // }
-
-  // getInitialState() {
-  //       return {
-  //           chatDisabled: true
-  //       };
-  //   }
 
   constructor(props) {
     super(props);
+<<<<<<< 7567a2c403821cab561eb9c307a93ec01498619e
        
   }
 
@@ -39,6 +35,29 @@ class UserDisplay extends React.Component {
     }
 
     return false;
+=======
+    this.state = {
+      chatDisabled: true,
+      chatLabel: "offline",
+    }
+
+    var self = this;
+    chatServices.listenForOnlineUser(function(dbId){
+      if(dbId === self.props.user._id){
+        self.setState({chatDisabled: false});
+        self.setState({chatLabel: "Let's chat!"});
+      }
+    });
+
+    chatServices.listenForOfflineUser(function(dbId){
+      if(dbId === self.props.user._id){
+        self.setState({chatDisabled: true});
+        self.setState({chatLabel: "offline"});
+      }
+    });
+
+    this.displayMatch();    
+>>>>>>> socket deletion in server.js; disables chat for unavailable users on login
   }
 
   displayMatch(){
@@ -109,6 +128,8 @@ class UserDisplay extends React.Component {
               toggleDrawer={this.props.toggleDrawer}
             />
             <ChatButton
+              chatDisabled={this.state.chatDisabled}
+              chatLabel={this.state.chatLabel}
               userId={this.props.user._id}
               lat={this.props.user.lat}
               lng={this.props.user.lng}

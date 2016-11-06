@@ -60,16 +60,18 @@ io.on('connection', function(client) {
 
     //extract all available users for the initial render and send as array to
     //newly connected client
-    var onlineUsers = Object.keys(usersTable).map(function(dbId){
-      return dbId; 
-    });
-    io.to(socketId).emit('usersOnline', JSON.stringify({users: onlineUsers}));
+   
+    // io.emit('onlineUsers', JSON.stringify({users: onlineUsers}));
 
     client.on('onlineUser',function(data){
       //extract sender id and save id prop to usersTable
       usersTable[data.sender] = socketId; 
       console.log('user saved to userstable', usersTable);
-      io.emit('usersOnline',JSON.stringify({users: data.sender}));
+      var onlineUsers = Object.keys(usersTable).map(function(dbId){
+        return dbId; 
+      });
+      console.log('emitting online users',onlineUsers);
+      io.sockets.emit('onlineUsers',JSON.stringify(onlineUsers));
     });
 
     client.on('requestChat', function(data) {
@@ -83,6 +85,19 @@ io.on('connection', function(client) {
       console.log('sending message',data);
       console.log('reciever socketid', usersTable[data.receiver]);
       io.to(usersTable[data.receiver]).emit('message',JSON.stringify(data.message));
+    });
+
+    client.on('disconnect',function(data){
+      var offlineUserDbId = null;
+      Object.keys(usersTable).forEach(function(dbId){
+        if(usersTable[dbId] === socketId){
+          offlineUserDbId = dbId; 
+          delete usersTable[dbId];
+          console.log('deleted from usersTable',dbId);
+        }
+      });
+      io.sockets.emit('offlineUser',JSON.stringify(offlineUserDbId));
+
     });
 
 });

@@ -20,6 +20,7 @@ import chatServices from '../services/chatServices.js';
 
 class ChatDialog extends React.Component {
   constructor(props) {
+    console.log('chatDialog props',props);
     super(props);
     this.state = {
       open: false,
@@ -29,7 +30,7 @@ class ChatDialog extends React.Component {
       attendees: [this.props.userInfo._id, this.props.userId],
       category: 'Dog Park',
       snackbar: false,
-      messages: [{text: 'a'}],
+      messages: [],
       inputMessage: ""
     };
     this.handleChange = this.handleChange.bind(this);
@@ -40,7 +41,7 @@ class ChatDialog extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validate = this.validate.bind(this);
     this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
-    this.handleSend = this.handleSend.bind(this);
+
     chatServices.listenForNewChat(this.handleReceivedChat.bind(this));
 
     var self = this;
@@ -48,10 +49,6 @@ class ChatDialog extends React.Component {
       console.log('message pushed to state',data);
       self.setState({messages: self.state.messages.concat([{text: data}])});
     })
-  }
-
-  handleSend(){
-    console.log('sending message');
   }
 
   handleOpen() {
@@ -64,10 +61,6 @@ class ChatDialog extends React.Component {
     //chatServices.requestChat(this.state.attendees);
     this.setState({open: true});
   }
-
-  // handleOpenChat() {
-  //   this.setState({open: true})
-  // }
 
   handleClose() {
     this.setState({open: false});
@@ -130,10 +123,10 @@ class ChatDialog extends React.Component {
   render() {
     const actions = [
       <TextField
-              hintText="Message"
-              value = {this.state.inputMessage} 
-              onChange = {this.handleInputMessage}
-            />,
+        hintText="Message"
+        value = {this.state.inputMessage} 
+        onChange = {this.handleInputMessage}
+      />,
       <FlatButton
         label="Close"
         primary={true}
@@ -147,20 +140,20 @@ class ChatDialog extends React.Component {
       />
     ];
 
-
-
     //autoScrollBodyContent within Dialog is super important when you're wondering why all of your form fields are not showing up
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(MyTheme)}>
         <div>
           <RaisedButton
+            style={{marginTop: "10px"}}
+            disabled={this.props.chatDisabled}
             onTouchTap={this.handleOpen}
-            label="Let's Chat!"
+            label={this.props.chatLabel}
             primary={true}
           />
 
           <Dialog
-            title="Chat Area"
+            title="Chat"
             titleStyle={{textAlign: 'center'}}
             actions={actions}
             modal={true}
@@ -174,12 +167,16 @@ class ChatDialog extends React.Component {
               {this.state.messages.map(function(message){
                 if(message.self){
                   return (
-                    <p>{message.text}</p>
+                    <div style={{textAlign: "right"}}>
+                      <p>{message.text}</p>
+                    </div>
                   )
                 }
                 else {
                   return (
-                    <p style={{color:"red"}}>{message.text}</p>
+                    <div style={{textAlign: "left"}}>
+                      <p style={{color:"red"}}>{message.text}</p>
+                    </div>
                   )
                 }
               })}
