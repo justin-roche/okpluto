@@ -166,9 +166,7 @@ class MeetupDialog extends React.Component {
             autoHideDuration={3000}
             onRequestClose={this.handleSnackbarClose}
           />
-
-
-
+          
         </div>
 
       </MuiThemeProvider>

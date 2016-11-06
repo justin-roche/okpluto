@@ -39,7 +39,7 @@ class UserDisplay extends React.Component {
     this.state = {
       chatDisabled: true
     }
-    
+
     var self = this;
     chatServices.listenForOnlineUser(function(dbId){
       if(dbId === self.props.user._id){
@@ -126,6 +126,7 @@ class UserDisplay extends React.Component {
             />
             <ChatButton
               chatDisabled={this.state.chatDisabled}
+              style={{marginTop: "20px"}}
               userId={this.props.user._id}
               lat={this.props.user.lat}
               lng={this.props.user.lng}
