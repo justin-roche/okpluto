@@ -1,6 +1,8 @@
 const authPath = require('./config/auth0');
 const request = require('request');
 const User = require('./app/models/users');
+const watson = require('watson-developer-cloud/personality-insights/v3');
+const personality_insights = new watson(require("./config/api").WATSON);
 
 const getUserAccessKeys = function(userId) {
     let oAuthUrl = `https://${authPath.AUTH0_DOMAIN}/oauth/token`;
@@ -77,6 +79,26 @@ const getFaceBookPosts = function(fbAccessKey) {
     });
 };
 
+const watsonAnalyze = function (posts) {
+    const params = {
+        text: posts,
+        consumption_preferences: false,
+        raw_scores: false,
+        headers: {
+            'accept-language': 'en',
+            'accept': 'application/json'
+        }
+    };
+
+    personality_insights.profile(params, (error, response) => {
+        if (error) {
+            console.log('ERROR: ', error);
+        } else {
+            console.log(JSON.stringify(response, null, 2));
+        }
+    });
+}
+
 const puppyMatcher = function(userId, watsonData){
     let breedArray = [];
     let breedObj = {
@@ -120,5 +142,6 @@ const puppyMatcher = function(userId, watsonData){
 
 module.exports = {
     getUserAccessKeys: getUserAccessKeys,
-    getFaceBookPosts: getFaceBookPosts
+    getFaceBookPosts: getFaceBookPosts,
+    watsonAnalyze: watsonAnalyze
 };
