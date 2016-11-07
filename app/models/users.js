@@ -25,7 +25,7 @@ var UserSchema = mongoose.Schema({
   blackListBreeds: [String]
 });
 
-UserSchema.methods.addBlackListBreeds = breedsArray => {
+UserSchema.methods.addBlackListBreeds = function(breedsArray){
   this.blackListBreeds = breedsArray;
   return this.save();
 };

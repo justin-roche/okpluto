@@ -8,10 +8,10 @@ var request = require('request');
 var authPath = require('../../config/auth0');
 var api = require('../../config/api.js');
 var Promise = require('bluebird');
-const util = require('../../util.js');
 const db = require('../../config/db');
 const ObjectId = require('mongoose').Types.ObjectId;
-const fs = require('fs');
+const generateBreedRecomendations = require('../../matching_util.js');
+const breedObj = require('../../breeds.js');
 const googleMaps = require('@google/maps').createClient({
 	key: api.API_KEY
 });
@@ -93,20 +93,11 @@ module.exports = function(app) {
 		request.post(url, { json: {id_token: id} } , (err, response) => {
 			if (err) console.log(err)
 
-			//gets facebook posts
+			const userId = response.body.user_id;
 
+			//updates blackListBreeds array on user record
 			if(response.body.identities[0].provider === 'facebook'){
-				util.getUserAccessKeys(response.body.user_id)
-				.then((identities) => {
-						util.getFaceBookPosts(identities[0].access_token)
-						.then((posts) => {
-							console.log("================== ALL POSTS FROMT FACEBOOK ===================");
-							console.log(posts);
-							console.log("===============================================================");
-
-							util.watsonAnalyze(posts);
-						});	
-				});
+				generateBreedRecomendations(userId, breedObj);
 			}
 
 			//Look for user in mongoDB;
@@ -135,10 +126,15 @@ module.exports = function(app) {
 						profilepic: userData.picture,
 						username: 'anonymous' + Math.floor(Math.random()*100000000)
 					}).save((err, user) => {
-						console.log('saved user');
 						if (err) console.log(err);
 						res.status(200).send({user: user, creation: true});
-					})
+					});
+
+					//updates blackListBreeds array on user record
+					if(response.body.identities[0].provider === 'facebook'){
+						generateBreedRecomendations(userId, breedObj);
+					}
+
 				} else {
 					console.log('sending user');
 					user.creation = false;
