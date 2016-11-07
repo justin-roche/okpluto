@@ -4,9 +4,10 @@
 
 "use strict";
 
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const ObjectId = require('mongoose').Schema.Types.ObjectId;
 
-var userSchema = mongoose.Schema({
+var UserSchema = mongoose.Schema({
   username: { type: String, index: { unique: true }},
   id: {type: String, required: true, index: { unique: true }},
   firstname: String,
@@ -17,18 +18,16 @@ var userSchema = mongoose.Schema({
   lng: Number,
   picLink: String,
   dogname: String,
-  dogLikes: [String],
+  dogLikes: [ObjectId],
   dogBreed: String,
   dogAge: Number,
   events: [String],
   blackListBreeds: [String]
 });
 
-userSchema.methods.addBlackListBreeds = function(breedsArray){
+UserSchema.methods.addBlackListBreeds = breedsArray => {
   this.blackListBreeds = breedsArray;
-  return this.save()
-}
+  return this.save();
+};
 
-var User = mongoose.model('User', userSchema);
-
-module.exports = User;
+module.exports = mongoose.model('User', UserSchema);

@@ -9,6 +9,9 @@ var authPath = require('../../config/auth0');
 var api = require('../../config/api.js');
 var Promise = require('bluebird');
 const util = require('../../util.js');
+const db = require('../../config/db');
+const ObjectId = require('mongoose').Types.ObjectId;
+const fs = require('fs');
 const googleMaps = require('@google/maps').createClient({
 	key: api.API_KEY
 });
@@ -84,7 +87,6 @@ module.exports = function(app) {
 		//Auth0 user ID
 		var id = req.body.id;
 
-
 		//POST path to retrieve user info from Auth0
 		var url = 'https://' + authPath.AUTH0_DOMAIN + '/tokeninfo';
 
@@ -140,7 +142,6 @@ module.exports = function(app) {
 				} else {
 					console.log('sending user');
 					user.creation = false;
-
 					res.status(200).send({user: user, creation: false});
 				}
 			})
@@ -165,6 +166,21 @@ module.exports = function(app) {
 		.exec((user) => {
 			res.status(200).send(userRemoved);
 		})
+	});
+
+	//======Like / Unlike Endpoints=======//
+	app.put('/api/users/like', (req, res) => {
+		db.collections.users.updateOne({_id: new ObjectId(req.body.userId)}, { $push: {dogLikes: new ObjectId(req.body.friendId)}}, err => {
+			if (err) console.log('error adding like to db', err);
+			else res.status(202).send(req.body.friendId);
+		});
+	});
+
+	app.delete('/api/users/like', (req, res) => {
+		db.collections.users.updateOne({_id: new ObjectId(req.body.userId)}, { $pullAll: {dogLikes: [new ObjectId(req.body.friendId)]}}, err => {
+			if (err) console.log('error removing like to db', err);
+			else res.status(202).send(req.body.friendId);
+		});
 	});
 
 	//======Event End Points=======//

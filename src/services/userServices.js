@@ -1,6 +1,6 @@
 "use strict";
 
-import Promise from 'bluebird'
+import Promise from 'bluebird';
 
 // ajax call to get latitude and longitude of an address
 const getLatLng = function(address) {
@@ -12,7 +12,7 @@ const getLatLng = function(address) {
       error: reject
     });
   });
-}
+};
 
 // Update user info
 const updateDb = function(newProps) {
@@ -104,38 +104,33 @@ const deleteUser = function(dbId) {
 };
 
 // like / unlike other users
-const likeUser = (dbId, friendId, like) => {
+const likeUser = (userId, friendId, like) => {
+  userId = userId || localStorage.getItem('mongoUserId');
   return new Promise((resolve, reject) => {
-    console.log('likeUser called', dbId, friendId, like);
-    dbId = dbId || localStorage.getItem('mongoUserId');
-
-    var checkExistingLikes = user => {
-      return new Promise((resolve, reject) => {
-        console.log('checkExistingLikes called with user object', user);
-        var data = {};
-        data.dbId = dbId;
-        data.dogLikes = user.dogLikes.map(item => { return item; });
-        // if (like === true && user.dogLikes.reduce(friend => { return friend == friendId; }, false) === false) {
-        if (like === true) {
-          data.dogLikes.push(user);
-          console.log('like doggy fired', data);
-          resolve(data);
-        }
-        // else if (like === false && user.dogLikes.reduce(friend => { return friend == friendId; }, false) === true) {
-        else if (like === false) {
-          data.dogLikes = data.dogLikes.filter(item => { return item != user; });
-          console.log('don\'t like doggy fired', data);
-          resolve(data);
-        } else {
-          reject('error checking existing users');
-        }
+    if (like === true) {
+      var data = {};
+      data.userId = userId;
+      data.friendId = friendId;
+      $.ajax({
+        url: 'api/users/like',
+        type: 'PUT',
+        data: data,
+        success: resolve,
+        error: reject
       });
-    };
-
-    findUser(dbId)
-      .then(checkExistingLikes)
-      .then(updateDb)
-      .then(resolve);
+    }
+    if (like === false) {
+      var data = {};
+      data.userId = userId;
+      data.friendId = friendId;
+      $.ajax({
+        url: 'api/users/like',
+        type: 'DELETE',
+        data: data,
+        success: resolve,
+        error: reject
+      });
+    }
   });
 };
 
