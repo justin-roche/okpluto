@@ -6,37 +6,16 @@ import ChatButton from './chatButton.jsx';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
-<<<<<<< 7567a2c403821cab561eb9c307a93ec01498619e
 import userServices from '../services/userServices.js';
-=======
 import chatServices from '../services/chatServices.js';
->>>>>>> socket deletion in server.js; disables chat for unavailable users on login
 
 class UserDisplay extends React.Component {
 
   constructor(props) {
     super(props);
-<<<<<<< 7567a2c403821cab561eb9c307a93ec01498619e
-       
-  }
-
-  formatBreedName(breed){
-    return breed.split(" ")
-      .map((word) => {
-        return word.toLowerCase();
-      }).join(" ");
-  }
-
-  analyzeBreeds(breed){
-    let blackList = this.props.userInfo.blackListBreeds;
-
-    if(blackList.indexOf(this.formatBreedName(breed)) === -1){
-      return true;
-    }
-
-    return false;
-=======
+    const isLiked = props.user.dogLikes.reduce(friend => { return friend == props.userInfo._id; }, false);
     this.state = {
+      isLiked: isLiked,
       chatDisabled: true,
       chatLabel: "offline",
     }
@@ -56,11 +35,34 @@ class UserDisplay extends React.Component {
       }
     });
 
-    this.displayMatch();    
->>>>>>> socket deletion in server.js; disables chat for unavailable users on login
+    this.displayMatch();
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  displayMatch(){
+  formatBreedName(breed) {
+    return breed.split(" ")
+      .map((word) => {
+        return word.toLowerCase();
+      }).join(" ");
+  }
+
+  analyzeBreeds(breed) {
+    let blackList = this.props.userInfo.blackListBreeds;
+
+    if(blackList.indexOf(this.formatBreedName(breed)) === -1){
+      return true;
+    }
+
+    return false;
+  }
+
+  // getInitialState() {
+  //       return {
+  //           chatDisabled: true
+  //       };
+  //   }
+
+  displayMatch() {
     if(this.analyzeBreeds(this.props.user.dogBreed)){
       console.log(`good breed match from ${this.props.user.dogname}`);
       //display a badmatch image
@@ -75,16 +77,10 @@ class UserDisplay extends React.Component {
     )
   }
 
-  constructor(props) {
-    super(props);
-    // this.state = {isLiked: this.props.isLiked};
-    this.state = {isLiked: false};
-    this.handleChange = this.handleChange.bind(this);
-  }
-
   handleChange(event) {
-    this.setState({isLiked: event.target.value});
-    userServices.likeUser(this.props.userInfo._id, this.props.user._id, this.state.isLiked);
+    this.setState({isLiked: event.target.checked}, () => {
+      userServices.likeUser(this.props.userInfo._id, this.props.user._id, this.state.isLiked);
+    });
   }
 
   render () {

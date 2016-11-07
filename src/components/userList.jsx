@@ -11,7 +11,7 @@ const Row = props => (
     {
       props.row.map(user => (
         <div className= "col-md-3">
-          <UserDisplay user={user} userInfo={props.userInfo} resetUserInfo={props.resetUserInfo} type='user' />
+          <UserDisplay user={user} userInfo={props.userInfo} resetUserInfo={props.resetUserInfo} type='user' dogLikes={props.dogLikes} key={user._id} />
         </div>
       ))
     }
@@ -22,7 +22,7 @@ class UserList extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log("current user from user list", this.props.userInfo);
+    console.log('UserList props.userInfo.dogLikes', props.userInfo.dogLikes);
   }
 
   render() {
@@ -47,7 +47,7 @@ class UserList extends React.Component {
         <div className = "container userList">
           {
             rows.map(row => (
-              <Row row={row} userInfo={this.props.userInfo} key={this.props.userInfo._id} resetUserInfo={this.props.resetUserInfo} />
+              <Row row={row} userInfo={this.props.userInfo} resetUserInfo={this.props.resetUserInfo} dogLikes={this.props.userInfo.dogLikes} key={row} />
             ))
           }
         </div>

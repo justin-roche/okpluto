@@ -9,6 +9,9 @@ var authPath = require('../../config/auth0');
 var api = require('../../config/api.js');
 var Promise = require('bluebird');
 const util = require('../../util.js');
+const db = require('../../config/db');
+const ObjectId = require('mongoose').Types.ObjectId;
+const fs = require('fs');
 const googleMaps = require('@google/maps').createClient({
 	key: api.API_KEY
 });
@@ -165,6 +168,17 @@ module.exports = function(app) {
 		.exec((user) => {
 			res.status(200).send(userRemoved);
 		})
+	});
+
+	app.put('/api/users/like', (req, res) => {
+		db.collections.users.updateOne({_id: new ObjectId(req.body.userId)}, { $push: {dogLikes: [new ObjectId(req.body.friendId)]}});
+		res.status(200);
+	});
+
+	app.delete('/api/users/like', (req, res) => {
+		db.collections.users.updateOne({_id: new ObjectId(req.body.userId)}, { $pullAll: {dogLikes: [new ObjectId(req.body.friendId)]}}, (err) => {
+			res.status(200);
+		});
 	});
 
 	//======Event End Points=======//
