@@ -84,7 +84,6 @@ class UserDisplay extends React.Component {
   }
 
   render () {
-    console.log("user info from user card", this.props.userInfo);
     return (
       <div>
         <Card>

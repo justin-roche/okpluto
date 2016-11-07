@@ -131,41 +131,6 @@ const likeUser = (userId, friendId, like) => {
         error: reject
       });
     }
-
-
-
-
-    // if (like === true) User.methods.addLike(userId, friendId, resolve);
-
-    // if (like === false) User.methods.removeLike(userId, friendId, resolve);
-
-    // else reject('error checking existing users');
-
-    // var checkExistingLikes = user => {
-    //   return new Promise((resolve, reject) => {
-    //     var data = {};
-    //     console.log('user', user);
-    //     data.dbId = dbId;
-    //     data.dogLikes = user.dogLikes.map(friend => { return friend; });
-    //     if (like === true && user.dogLikes.reduce(friend => { return friend == friendId; }, false) === false) {
-    //       data.dogLikes.push(friendId);
-    //       console.log('like doggy fired', data);
-    //       resolve(data);
-    //     }
-    //     else if (like === false && user.dogLikes.reduce(friend => { return friend == friendId; }, false) === true) {
-    //       data.dogLikes = data.dogLikes.filter(item => { return item != user; });
-    //       console.log('don\'t like doggy fired', data);
-    //       resolve(data);
-    //     } else {
-    //       reject('error checking existing users');
-    //     }
-    //   });
-    // };
-
-    // findUser(dbId)
-    //   .then(checkExistingLikes)
-    //   .then(updateDb)
-    //   .then(resolve);
   });
 };
 

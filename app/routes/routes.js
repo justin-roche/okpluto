@@ -170,14 +170,18 @@ module.exports = function(app) {
 		})
 	});
 
+	//======Like / Unlike Endpoints=======//
 	app.put('/api/users/like', (req, res) => {
-		db.collections.users.updateOne({_id: new ObjectId(req.body.userId)}, { $push: {dogLikes: [new ObjectId(req.body.friendId)]}});
-		res.status(200);
+		db.collections.users.updateOne({_id: new ObjectId(req.body.userId)}, { $push: {dogLikes: new ObjectId(req.body.friendId)}}, err => {
+			if (err) console.log('error adding like to db', err);
+			else res.status(200);
+		});
 	});
 
 	app.delete('/api/users/like', (req, res) => {
-		db.collections.users.updateOne({_id: new ObjectId(req.body.userId)}, { $pullAll: {dogLikes: [new ObjectId(req.body.friendId)]}}, (err) => {
-			res.status(200);
+		db.collections.users.updateOne({_id: new ObjectId(req.body.userId)}, { $pullAll: {dogLikes: [new ObjectId(req.body.friendId)]}}, err => {
+			if (err) console.log('error removing like to db', err);
+			else res.status(200);
 		});
 	});
 
