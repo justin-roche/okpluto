@@ -26,8 +26,6 @@ const getUserAccessKeys = function(userId) {
                 reject(error);
             }
 
-            console.log("Auth0 Access Token Response Body ===>", JSON.parse(body));
-
             let accessToken = JSON.parse(body).access_token;
             request({
                 method: 'GET',
@@ -41,7 +39,6 @@ const getUserAccessKeys = function(userId) {
                     console.log("error", err);
                     reject(err);
                 }
-                console.log("User Response Body with use of Auth0 access token")
                 console.log(JSON.parse(response.body));
 
                 let fbAccessKey = JSON.parse(response.body).identities[0].access_token;

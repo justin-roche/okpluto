@@ -8,7 +8,6 @@ var request = require('request');
 var authPath = require('../../config/auth0');
 var api = require('../../config/api.js');
 var Promise = require('bluebird');
-const util = require('../../util.js');
 const db = require('../../config/db');
 const ObjectId = require('mongoose').Types.ObjectId;
 const generateBreedRecomendations = require('../../matching_util.js');
@@ -127,7 +126,6 @@ module.exports = function(app) {
 						profilepic: userData.picture,
 						username: 'anonymous' + Math.floor(Math.random()*100000000)
 					}).save((err, user) => {
-						console.log('saved user');
 						if (err) console.log(err);
 						res.status(200).send({user: user, creation: true});
 					});
