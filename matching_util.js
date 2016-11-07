@@ -4,6 +4,8 @@ const User = require('./app/models/users');
 const watson = require('watson-developer-cloud/personality-insights/v3');
 const personality_insights = new watson(require("./config/api").WATSON);
 
+
+//handles the Auth0 flow for getting an external api access key (in this case Facebook)
 const getUserAccessKeys = function(userId) {
     let oAuthUrl = `https://${authPath.AUTH0_DOMAIN}/oauth/token`;
 
@@ -24,6 +26,8 @@ const getUserAccessKeys = function(userId) {
                 reject(error);
             }
 
+            console.log("Auth0 Access Token Response Body ===>", JSON.parse(body));
+
             let accessToken = JSON.parse(body).access_token;
             request({
                 method: 'GET',
@@ -37,6 +41,9 @@ const getUserAccessKeys = function(userId) {
                     console.log("error", err);
                     reject(err);
                 }
+                console.log("User Response Body with use of Auth0 access token")
+                console.log(JSON.parse(response.body));
+
                 let fbAccessKey = JSON.parse(response.body).identities[0].access_token;
                 resolve(JSON.parse(response.body).identities);
             });
@@ -44,6 +51,7 @@ const getUserAccessKeys = function(userId) {
     });
 };
 
+//recursively calls the facebook api to get all of the User's posts
 const getFaceBookPosts = function(fbAccessKey) {
     let posts = '';
     let url = `https://graph.facebook.com/v2.8/me/posts?access_token=${fbAccessKey}`;
@@ -79,6 +87,7 @@ const getFaceBookPosts = function(fbAccessKey) {
     });
 };
 
+//analyzes the user's posts with the Watson api
 const watsonAnalyze = function (posts) {
     const params = {
         text: posts,
@@ -103,6 +112,7 @@ const watsonAnalyze = function (posts) {
     });
 };
 
+//determines is the User is a good match for a specific breed trait
 const breedPersonalityMatch = function(breedTrait, watsonData){
     let userTrait = watsonData.personality.filter(traitObj => {
         return traitObj.name.toLowerCase() === breedTrait;
@@ -114,8 +124,9 @@ const breedPersonalityMatch = function(breedTrait, watsonData){
         return false;
     }
     
-}
+};
 
+//determines breed recomendations for a user and adds a breed black list array to the User Record
 const puppyMatcher = function(userId, watsonData, breedObj){
     let breedArray = [];
 
@@ -147,6 +158,7 @@ const puppyMatcher = function(userId, watsonData, breedObj){
    
 };
 
+//composes all of the above functions
 const addBlackListBreeds = function(userId, breedObj){
     getUserAccessKeys(userId)
         .then((identities) => getFaceBookPosts(identities[0].access_token))
