@@ -13,12 +13,12 @@ class UserDisplay extends React.Component {
 
   constructor(props) {
     super(props);
-    const isLiked = props.user.dogLikes.reduce(friend => { return friend == props.userInfo._id; }, false);
+    const isLiked = props.userInfo.dogLikes.some(friend => { return friend == props.user._id; });
     this.state = {
       isLiked: isLiked,
       chatDisabled: true,
       chatLabel: "offline",
-    }
+    };
 
     var self = this;
     chatServices.listenForOnlineUser(function(dbId){
@@ -83,7 +83,7 @@ class UserDisplay extends React.Component {
     });
   }
 
-  render () {
+  render () { 
     return (
       <div>
         <Card>
